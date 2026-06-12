@@ -3,7 +3,7 @@ CleanIQ — Employee Training Platform
 CleanIQ is a gamified internal training platform built for professional cleaning companies. It allows employers to create quizzes and training modules, and employees to complete them through solo practice or live competitive sessions.
 
 
-⚠️ Current Status: Frontend UI is complete. Backend database (Supabase) is not yet connected — user data resets when the server restarts. Full backend integration is in progress.
+⚠️ Current Status: Employee frontend Is Done. Backend database (Supabase) is not yet connected — user data resets when the server restarts. Full backend integration is in progress.
 
 
 
