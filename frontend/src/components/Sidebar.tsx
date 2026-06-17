@@ -56,13 +56,7 @@ export default function Sidebar() {
 
       {/* Bottom Nav */}
       <div className="px-4 space-y-1">
-        <button className="w-full rounded-xl px-4 py-3 flex items-center gap-4 transition-all text-left"
-          style={{ color: '#434843' }}
-          onMouseEnter={e => e.currentTarget.style.background = '#f4f4f0'}
-          onMouseLeave={e => e.currentTarget.style.background = 'transparent'}>
-          <span className="material-symbols-outlined text-2xl">help_outline</span>
-          <span className="text-[14px] font-medium">Support Center</span>
-        </button>
+        
         <button onClick={handleLogout}
           className="w-full rounded-xl px-4 py-3 flex items-center gap-4 transition-all text-left"
           style={{ color: '#ba1a1a' }}

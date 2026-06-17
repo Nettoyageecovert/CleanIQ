@@ -83,17 +83,7 @@ export default function SettingsPage() {
                   {user?.fullName}
                 </h3>
                 <p className="text-[14px] mb-3" style={{ color: '#737873' }}>{user?.email}</p>
-                <div className="flex flex-wrap justify-center md:justify-start gap-2">
-                  <span className="px-3 py-1 rounded-full text-[12px] font-bold" style={{ background: '#f8dac5', color: '#755e4d' }}>
-                    Steward Level 4
-                  </span>
-                  <span className="px-3 py-1 rounded-full text-[12px] font-bold" style={{ background: '#dae8be', color: '#3f4b2c' }}>
-                    98% Compliance Score
-                  </span>
-                  <span className="px-3 py-1 rounded-full text-[12px] font-bold capitalize" style={{ background: '#efeeea', color: '#434843' }}>
-                    {user?.role}
-                  </span>
-                </div>
+               
               </div>
               <div className="shrink-0">
                 <button className="px-6 py-2 rounded-lg text-[14px] font-bold border transition-all"
@@ -105,27 +95,7 @@ export default function SettingsPage() {
               </div>
             </section>
 
-            {/* Sustainability Card */}
-            <section className="col-span-12 lg:col-span-4 rounded-xl p-8 flex flex-col justify-between"
-              style={{ background: '#2d4033', boxShadow: '0 4px 16px rgba(23,42,30,0.15)' }}>
-              <div>
-                <span className="material-symbols-outlined text-[32px] mb-3 block" style={{ color: '#9eac85' }}>eco</span>
-                <h4 className="text-[20px] font-bold text-white mb-2" style={{ fontFamily: 'Manrope, sans-serif' }}>
-                  Sustainability Impact
-                </h4>
-                <p className="text-[14px]" style={{ color: 'rgba(182,204,186,0.8)' }}>
-                  You've diverted 124kg of plastic waste this quarter.
-                </p>
-              </div>
-              <div className="mt-8">
-                <div className="w-full h-2 rounded-full overflow-hidden" style={{ background: 'rgba(255,255,255,0.15)' }}>
-                  <div className="h-full rounded-full" style={{ width: '75%', background: '#9eac85' }} />
-                </div>
-                <p className="mt-2 text-[11px] font-bold uppercase tracking-wider" style={{ color: 'rgba(182,204,186,0.7)' }}>
-                  Level 5 Goal: 75% Completed
-                </p>
-              </div>
-            </section>
+            
 
             {/* Account Settings */}
             <section className="col-span-12 md:col-span-6 bg-white rounded-xl p-8 border border-[#e1e4e0]/40 transition-all duration-300"
@@ -143,7 +113,7 @@ export default function SettingsPage() {
                   { icon: 'mail', label: 'Email Notifications', sublabel: 'Manage quiz and training alerts' },
                   { icon: 'lock', label: 'Change Password', sublabel: 'Update your login credentials' },
                   { icon: 'person', label: 'Edit Profile Info', sublabel: 'Update your name and details' },
-                  { icon: 'badge', label: 'Certifications', sublabel: 'View your earned certificates' },
+                  
                 ].map(item => (
                   <li key={item.label}>
                     <button className="w-full flex items-center justify-between p-4 rounded-xl transition-colors text-left group"
@@ -221,28 +191,7 @@ export default function SettingsPage() {
               </div>
             </section>
 
-            {/* Danger Zone */}
-            <section className="col-span-12 rounded-xl p-8 border"
-              style={{ background: 'rgba(255,218,214,0.2)', borderColor: 'rgba(186,26,26,0.1)' }}>
-              <div className="flex items-center justify-between flex-wrap gap-6">
-                <div>
-                  <h4 className="text-[20px] font-bold mb-1" style={{ fontFamily: 'Manrope, sans-serif', color: '#ba1a1a' }}>
-                    Danger Zone
-                  </h4>
-                  <p className="text-[15px]" style={{ color: '#434843' }}>
-                    Log out of your session or deactivate your account.
-                  </p>
-                </div>
-                <button onClick={() => setShowLogoutConfirm(true)}
-                  className="flex items-center gap-2 px-6 py-3 rounded-xl text-[14px] font-bold transition-all"
-                  style={{ background: '#ba1a1a', color: '#ffffff' }}
-                  onMouseEnter={e => e.currentTarget.style.background = '#93000a'}
-                  onMouseLeave={e => e.currentTarget.style.background = '#ba1a1a'}>
-                  <span className="material-symbols-outlined text-[18px]">logout</span>
-                  Log Out
-                </button>
-              </div>
-            </section>
+            
           </div>
         </div>
 
@@ -266,42 +215,7 @@ export default function SettingsPage() {
         </footer>
       </main>
 
-      {/* Logout Confirmation Modal */}
-      {showLogoutConfirm && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center"
-          style={{ background: 'rgba(0,0,0,0.4)', backdropFilter: 'blur(4px)' }}>
-          <div className="bg-white rounded-2xl p-8 w-full max-w-sm mx-4"
-            style={{ boxShadow: '0 20px 60px rgba(0,0,0,0.2)' }}>
-            <div className="w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-4"
-              style={{ background: '#ffdad6' }}>
-              <span className="material-symbols-outlined text-[28px]" style={{ color: '#ba1a1a' }}>logout</span>
-            </div>
-            <h3 className="text-[20px] font-bold text-center mb-2"
-              style={{ fontFamily: 'Manrope, sans-serif', color: '#172a1e' }}>
-              Log Out?
-            </h3>
-            <p className="text-[14px] text-center mb-6" style={{ color: '#434843' }}>
-              Are you sure you want to log out of your CleanIQ account?
-            </p>
-            <div className="flex gap-3">
-              <button onClick={() => setShowLogoutConfirm(false)}
-                className="flex-1 py-3 rounded-xl text-[14px] font-bold border transition-all"
-                style={{ borderColor: '#e1e4e0', color: '#434843' }}
-                onMouseEnter={e => e.currentTarget.style.background = '#f4f4f0'}
-                onMouseLeave={e => e.currentTarget.style.background = 'transparent'}>
-                Cancel
-              </button>
-              <button onClick={handleLogout}
-                className="flex-1 py-3 rounded-xl text-[14px] font-bold transition-all"
-                style={{ background: '#ba1a1a', color: '#ffffff' }}
-                onMouseEnter={e => e.currentTarget.style.background = '#93000a'}
-                onMouseLeave={e => e.currentTarget.style.background = '#ba1a1a'}>
-                Yes, Log Out
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+    
     </div>
   );
 }

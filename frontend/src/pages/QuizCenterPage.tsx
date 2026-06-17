@@ -211,41 +211,7 @@ export default function QuizCenterPage() {
             ))}
           </div>
 
-          {/* Bottom CTA */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 pt-4">
-            <div className="lg:col-span-2 relative h-52 rounded-2xl overflow-hidden"
-              style={{ background: 'linear-gradient(135deg, #172a1e 0%, #344022 100%)' }}>
-              <div className="absolute -right-10 -top-10 w-56 h-56 rounded-full opacity-10" style={{ background: '#d2e8d6' }} />
-              <div className="absolute inset-0 flex flex-col justify-center px-10">
-                <h5 className="text-[22px] font-bold text-white mb-2" style={{ fontFamily: 'Manrope, sans-serif' }}>
-                  Mastered Your Current Path?
-                </h5>
-                <p className="text-[15px] mb-4 max-w-md" style={{ color: 'rgba(182,204,186,0.9)' }}>
-                  Your consistent high scores place you in the top 5% of employees. Unlock senior certification modules today.
-                </p>
-                <a href="#" className="inline-flex items-center gap-2 font-bold text-[14px]" style={{ color: '#d2e8d6' }}>
-                  View New Modules
-                  <span className="material-symbols-outlined text-[18px]">arrow_forward</span>
-                </a>
-              </div>
-            </div>
-            <div className="rounded-2xl p-6 flex flex-col justify-between"
-              style={{ background: '#efeeea', border: '1px solid rgba(195,200,193,0.3)' }}>
-              <div>
-                <span className="material-symbols-outlined text-[40px] mb-3 block" style={{ color: '#172a1e' }}>auto_awesome</span>
-                <h5 className="text-[18px] font-bold mb-2" style={{ fontFamily: 'Manrope, sans-serif', color: '#172a1e' }}>
-                  Learning Insight
-                </h5>
-                <p className="text-[14px] leading-relaxed" style={{ color: '#434843' }}>
-                  You typically perform 12% better on quizzes taken before 10:00 AM. Keep up the morning routine!
-                </p>
-              </div>
-              <button className="mt-4 text-[14px] font-bold flex items-center gap-2" style={{ color: '#172a1e' }}>
-                Detailed Stats
-                <span className="material-symbols-outlined text-[18px]">analytics</span>
-              </button>
-            </div>
-          </div>
+    
         </div>
 
         {/* Footer */}

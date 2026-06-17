@@ -246,32 +246,7 @@ export default function MyCoursesPage() {
                 </div>
               </div>
             ))}
-
-            {/* CTA Card */}
-            <div className="lg:col-span-2 rounded-[20px] p-8 flex flex-col md:flex-row items-center gap-8 relative overflow-hidden"
-              style={{ background: '#2d4033' }}>
-              <div className="absolute -right-10 -top-10 w-48 h-48 rounded-full opacity-10" style={{ background: '#d2e8d6' }} />
-              <div className="relative z-10 flex-1">
-                <h3 className="text-[28px] font-bold text-white mb-2" style={{ fontFamily: 'Manrope, sans-serif' }}>
-                  Ready to Level Up?
-                </h3>
-                <p className="text-[15px] mb-5" style={{ color: 'rgba(182,204,186,0.85)' }}>
-                  Unlock advanced certifications in Hazard Safety and Commercial Cleaning. Special discount for enrolled employees.
-                </p>
-                <button className="px-6 py-3 rounded-full text-[14px] font-bold transition-all"
-                  style={{ background: '#dae8be', color: '#1f2a0e' }}
-                  onMouseEnter={e => e.currentTarget.style.background = '#ffffff'}
-                  onMouseLeave={e => e.currentTarget.style.background = '#dae8be'}>
-                  Browse Certifications
-                </button>
-              </div>
-              <div className="relative z-10 w-32 h-32 rounded-2xl flex items-center justify-center rotate-3"
-                style={{ background: 'rgba(255,255,255,0.1)', border: '2px solid rgba(255,255,255,0.2)' }}>
-                <span className="material-symbols-outlined text-[64px]" style={{ color: 'rgba(210,232,214,0.8)' }}>
-                  workspace_premium
-                </span>
-              </div>
-            </div>
+            
           </div>
         </section>
 

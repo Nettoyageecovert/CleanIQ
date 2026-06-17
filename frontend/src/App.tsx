@@ -9,6 +9,8 @@ import QuizCenterPage from './pages/QuizCenterPage';
 import QuizPlayPage from './pages/QuizPlayPage';
 import QuizReviewPage from './pages/QuizReviewPage';
 import SettingsPage from './pages/SettingsPage';
+import CourseManagementPage from './pages/CourseManagementPage';
+import QuizCreatorPage from './pages/QuizCreatorPage';
 
 
 
@@ -26,6 +28,9 @@ function App() {
           <Route path="/employee/quiz/play" element={<QuizPlayPage />} />
           <Route path="/employee/quiz/review" element={<QuizReviewPage />} />
           <Route path="/employee/settings" element={<SettingsPage />} />
+
+          <Route path="/employer/quiz-creator" element={<QuizCreatorPage />} />
+          <Route path="/employer/courses" element={<CourseManagementPage />} />
           <Route path="*" element={<Navigate to="/register" replace />} />
         </Routes>
       </BrowserRouter>
