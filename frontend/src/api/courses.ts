@@ -1,71 +1,61 @@
-import axios from 'axios';
+import api from './auth';
 
 // Define what a course looks like on the frontend
+export interface Lesson {
+  id?: string;
+  title: string;
+  type: 'video' | 'document';
+  meta: string;
+}
+
+export interface Module {
+  id?: string;
+  title: string;
+  lessons: Lesson[];
+}
+
 export interface Course {
   id: string;
   title: string;
   description: string;
+  category: string;
+  difficulty: 'Beginner' | 'Intermediate' | 'Advanced';
+  certifiable: boolean;
+  thumbnailUrl?: string | null;
+  modules?: Module[];
   createdAt?: string;
 }
 
-const API_URL = '/api/courses';
+const ENDPOINT = '/courses';
 
 export const courseApi = {
     // Fetch all courses (used by both employee my courses page and employer side)
     getAllCourses: async (): Promise<Course[]> => {
-        const response = await axios.get(API_URL);
+        const response = await api.get<Course[]>(ENDPOINT);
         return response.data;
     },
 
     // Fetch a single course by ID
-    getCourseById: async (id: string): Promise<Course[]> => {
-        const response = await axios.get('${API_URL}/${id}');
+    getCourseById: async (id: string): Promise<Course> => {
+        const response = await api.get<Course>(`${ENDPOINT}/${id}`);
         return response.data;
     },
 
     // Create a new course (employer side)
     createCourse: async (courseData: Omit<Course, 'id' | 'createdAt'>): Promise<Course> => {
-        const response = await axios.post(API_URL, courseData);
+        const response = await api.post<Course>(ENDPOINT, courseData);
         return response.data;
     },
 
     // Partially update a course (Employer side)
     updateCourse: async (id: string, updatedFields: Partial<Omit<Course, 'id'>>): Promise<Course> => {
-        const response = await axios.patch(`${API_URL}/${id}`, updatedFields);
+        const response = await api.patch<Course>(`${ENDPOINT}/${id}`, updatedFields);
         return response.data;
     },
 
     // Delete a course (Employer side)
     deleteCourse: async (id: string): Promise<{ message: string }> => {
-        const response = await axios.delete(`${API_URL}/${id}`);
+        const response = await api.delete<{ message: string }>(`${ENDPOINT}/${id}`);
         return response.data;
     }
 };
-
-
-export interface AuthResponse {
-  message: string;
-  token: string;
-  user: AuthUser;
-}
-
-// Register a new user
-export const registerUser = async (data: {
-  fullName: string;
-  email: string;
-  password: string;
-}): Promise<AuthResponse> => {
-  const response = await api.post<AuthResponse>('/auth/register', data);
-  return response.data;
-};
-
-// Login an existing user
-export const loginUser = async (data: {
-  email: string;
-  password: string;
-}): Promise<AuthResponse> => {
-  const response = await api.post<AuthResponse>('/auth/login', data);
-  return response.data;
-};
-
-export default api;
