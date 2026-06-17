@@ -18,25 +18,25 @@ export const courseApi = {
     },
 
     // Fetch a single course by ID
-    getCourseById = async (id: string): Promise<Course[]> => {
+    getCourseById: async (id: string): Promise<Course[]> => {
         const response = await axios.get('${API_URL}/${id}');
         return response.data;
     },
 
     // Create a new course (employer side)
-    createCourse = async (courseData: Omit<Course, 'id' | 'createdAt'>): Promise<Course> => {
+    createCourse: async (courseData: Omit<Course, 'id' | 'createdAt'>): Promise<Course> => {
         const response = await axios.post(API_URL, courseData);
         return response.data;
     },
 
     // Partially update a course (Employer side)
-    updateCourse = async (id: string, updatedFields: Partial<Omit<Course, 'id'>>): Promise<Course> => {
+    updateCourse: async (id: string, updatedFields: Partial<Omit<Course, 'id'>>): Promise<Course> => {
         const response = await axios.patch(`${API_URL}/${id}`, updatedFields);
         return response.data;
     },
 
     // Delete a course (Employer side)
-    deleteCourse = async (id: string): Promise<{ message: string }> => {
+    deleteCourse: async (id: string): Promise<{ message: string }> => {
         const response = await axios.delete(`${API_URL}/${id}`);
         return response.data;
     }
