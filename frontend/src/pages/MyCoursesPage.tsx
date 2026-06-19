@@ -79,7 +79,7 @@ export default function MyCoursesPage() {
   };
 
   return (
-    <div className="bg-[#faf9f5] text-[#1b1c1a] min-h-screen" style={{ fontFamily: 'Inter, sans-serif' }}>
+    <div className="theme-page min-h-screen" style={{ fontFamily: 'Inter, sans-serif' }}>
       <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
       <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
 
@@ -88,8 +88,7 @@ export default function MyCoursesPage() {
       <main className="lg:ml-72 min-h-screen flex flex-col">
 
         {/* Header */}
-        <header className="h-20 flex items-center justify-between px-8 sticky top-0 z-40 border-b border-[#e1e4e0]/30"
-          style={{ background: 'rgba(250,249,245,0.8)', backdropFilter: 'blur(20px)' }}>
+        <header className="theme-header-bar h-20 flex items-center justify-between px-8 sticky top-0 z-40 border-b">
           <h1 className="text-[24px] font-bold" style={{ fontFamily: 'Manrope, sans-serif', color: '#172a1e' }}>
             My Courses
           </h1>
@@ -177,23 +176,17 @@ export default function MyCoursesPage() {
         <section className="px-8 pb-12 max-w-[1200px] mx-auto w-full">
           {/* Filters */}
           <div className="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
-            <div className="flex p-1 rounded-xl border border-[#e1e4e0]" style={{ background: '#f4f4f0' }}>
+            <div className="theme-filter-tabs">
               {([['all', 'All Courses'], ['in-progress', 'In Progress'], ['completed', 'Completed']] as const).map(([val, label]) => (
                 <button key={val} onClick={() => setFilter(val)}
-                  className="px-5 py-2 rounded-lg text-[14px] font-medium transition-all"
-                  style={{
-                    background: filter === val ? '#ffffff' : 'transparent',
-                    color: filter === val ? '#172a1e' : '#434843',
-                    boxShadow: filter === val ? '0 1px 4px rgba(0,0,0,0.08)' : 'none',
-                  }}>
+                  className={`theme-filter-tabs__tab ${filter === val ? 'theme-filter-tabs__tab--active' : ''}`}>
                   {label}
                 </button>
               ))}
             </div>
             <div className="flex items-center gap-2">
-              <span className="text-[14px]" style={{ color: '#737873' }}>Sort by:</span>
-              <select className="text-[14px] font-bold border-none bg-transparent outline-none cursor-pointer"
-                style={{ color: '#172a1e' }}
+              <span className="text-[14px] theme-muted">Sort by:</span>
+              <select className="text-[14px] font-bold border-none bg-transparent outline-none cursor-pointer theme-text-primary"
                 value={sort} onChange={e => setSort(e.target.value as SortType)}>
                 <option value="recent">Recently Accessed</option>
                 <option value="title">Title A–Z</option>
@@ -210,8 +203,8 @@ export default function MyCoursesPage() {
                 style={{ boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}
                 onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-4px)'; e.currentTarget.style.boxShadow = '0 12px 24px rgba(45,64,51,0.1)'; }}
                 onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 2px 8px rgba(0,0,0,0.04)'; }}>
-                <div className="h-44 relative flex items-center justify-center" style={{ background: course.color }}>
-                  <span className="material-symbols-outlined text-[72px] opacity-40" style={{ color: '#172a1e' }}>
+                <div className="h-44 relative flex items-center justify-center theme-course-hero" style={{ background: course.color }}>
+                  <span className="material-symbols-outlined text-[72px]">
                     {course.icon}
                   </span>
                   {course.required && (
@@ -251,7 +244,7 @@ export default function MyCoursesPage() {
         </section>
 
         {/* Footer */}
-        <footer className="py-10 px-8 mt-auto bg-white border-t border-[#e1e4e0]/30">
+        <footer className="theme-footer py-10 px-8 mt-auto border-t">
           <div className="max-w-[1200px] mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
             <div>
               <span className="text-[20px] font-bold" style={{ fontFamily: 'Manrope, sans-serif', color: '#172a1e' }}>CleanIQ</span>

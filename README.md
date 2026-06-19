@@ -22,6 +22,13 @@ Backend & Database
 
 🔜 Supabase (PostgreSQL) connection coming soon
 
+Storage switch
+
+- `USER_STORE=memory` keeps the current in-memory mode.
+- `USER_STORE=postgres` enables the Postgres adapter in `backend/src/storage/postgresUserStore.js`.
+- When using Postgres, set `DATABASE_URL` and optionally `DATABASE_SSL=true` for hosted providers.
+- The auth controller only talks to the storage interface, so the same login/register routes keep working after the swap.
+
 
 Tech Stack
 

@@ -38,8 +38,12 @@ export default function LoginPage() {
     setError('');
     try {
       const data = await loginUser(form);
+      if (data.user.role !== 'employee') {
+        setError('This account is for admin access. Use the admin login page.');
+        return;
+      }
       login(data.user, data.token);
-      navigate(data.user.role === 'employer' ? '/employer/dashboard' : '/employee/dashboard');
+      navigate('/employee/dashboard');
     } catch (err: any) {
       setError(err.response?.data?.message || 'Something went wrong. Please try again.');
     } finally {
@@ -177,6 +181,12 @@ export default function LoginPage() {
               Don't have an account?{' '}
               <Link to="/register" className="font-bold hover:underline" style={{ color: '#172a1e' }}>
                 Sign up
+              </Link>
+            </p>
+            <p className="mt-2 text-[12px]" style={{ color: '#737873' }}>
+              Admin access?{' '}
+              <Link to="/admin/login" className="font-bold hover:underline" style={{ color: '#172a1e' }}>
+                Go to admin login
               </Link>
             </p>
           </div>

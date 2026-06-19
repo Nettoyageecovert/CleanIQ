@@ -46,4 +46,17 @@ export const loginUser = async (data: {
   return response.data;
 };
 
+export const updateProfile = async (fullName: string): Promise<{ message: string; user: AuthUser }> => {
+  const response = await api.patch<{ message: string; user: AuthUser }>('/auth/profile', { fullName });
+  return response.data;
+};
+
+export const changePassword = async (data: {
+  currentPassword: string;
+  newPassword: string;
+}): Promise<{ message: string }> => {
+  const response = await api.patch<{ message: string }>('/auth/password', data);
+  return response.data;
+};
+
 export default api;
