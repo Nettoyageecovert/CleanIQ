@@ -40,6 +40,25 @@ class SupabaseUserStore {
       : null;
   }
 
+  async findAllEmployees() {
+    const { data, error } = await this.supabase
+      .from('users')
+      .select('id, full_name, email, role')
+      .eq('role', 'employee')
+      .order('full_name', { ascending: true });
+
+    if (error) {
+      throw error;
+    }
+
+    return (data || []).map(row => ({
+      id: row.id,
+      fullName: row.full_name,
+      email: row.email,
+      role: row.role,
+    }));
+  }
+
   async createEmployee({ fullName, email, passwordHash }) {
     const normalizedEmail = email.toLowerCase().trim();
     const { data, error } = await this.supabase

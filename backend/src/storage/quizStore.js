@@ -60,6 +60,44 @@ class QuizStore {
     return quiz;
   }
 
+  async updateQuiz(id, data) {
+    const index = this.quizzes.findIndex(quiz => quiz.id === id);
+    if (index === -1) {
+      return null;
+    }
+
+    const existing = this.quizzes[index];
+    const quiz = {
+      ...existing,
+      title: data.title,
+      category: data.category,
+      relatedCourse: data.relatedCourse,
+      timeLimit: data.timeLimit,
+      passingPercent: data.passingPercent,
+      questions: data.questions || [],
+      updatedAt: new Date().toISOString(),
+    };
+    this.quizzes[index] = quiz;
+    return quiz;
+  }
+
+  async deleteQuiz(id) {
+    const index = this.quizzes.findIndex(quiz => quiz.id === id);
+    if (index === -1) {
+      return false;
+    }
+
+    this.quizzes.splice(index, 1);
+    this.attempts = this.attempts.filter(attempt => attempt.quizId !== id);
+    return true;
+  }
+
+  async findAllAttempts() {
+    return this.attempts
+      .slice()
+      .sort((a, b) => new Date(b.completedAt).getTime() - new Date(a.completedAt).getTime());
+  }
+
   async findAttemptById(id) {
     return this.attempts.find(attempt => attempt.id === id) || null;
   }

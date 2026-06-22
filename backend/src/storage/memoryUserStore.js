@@ -46,6 +46,12 @@ class MemoryUserStore {
     return true;
   }
 
+  async findAllEmployees() {
+    return this.users
+      .filter(user => user.role === 'employee')
+      .map(({ id, fullName, email, role }) => ({ id, fullName, email, role }));
+  }
+
   async createEmployee({ fullName, email, passwordHash }) {
     const user = {
       id: `user_${Date.now()}`,

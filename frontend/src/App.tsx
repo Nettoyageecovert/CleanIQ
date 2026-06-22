@@ -16,6 +16,7 @@ import EmployerSettingsPage from './pages/EmployerSettingsPage';
 import EmployeeAnalyticsPage from './pages/EmployeeAnalyticsPage';
 import CourseManagementPage from './pages/CourseManagementPage';
 import QuizCreatorPage from './pages/QuizCreatorPage';
+import EmployerAnalyticsPage from './pages/EmployerAnalyticsPage';
 
 function LoadingScreen() {
   return (
@@ -55,7 +56,8 @@ function AppRoutes() {
       <Route path="/employer/dashboard" element={user?.role === 'employer' ? <EmployerDashboardPage /> : <Navigate to={employerFallback} replace />} />
       <Route path="/employer/courses" element={user?.role === 'employer' ? <CourseManagementPage /> : <Navigate to={employerFallback} replace />} />
       <Route path="/employer/quiz-creator" element={user?.role === 'employer' ? <QuizCreatorPage /> : <Navigate to={employerFallback} replace />} />
-      <Route path="/employer/analytics" element={user?.role === 'employer' ? <Navigate to="/employer/dashboard" replace /> : <Navigate to={employerFallback} replace />} />
+      <Route path="/employer/quiz-creator/:quizId" element={user?.role === 'employer' ? <QuizCreatorPage /> : <Navigate to={employerFallback} replace />} />
+      <Route path="/employer/analytics" element={user?.role === 'employer' ? <EmployerAnalyticsPage /> : <Navigate to={employerFallback} replace />} />
       <Route path="/employer/settings" element={user?.role === 'employer' ? <EmployerSettingsPage /> : <Navigate to={employerFallback} replace />} />
 
       <Route path="*" element={<Navigate to={homePath} replace />} />

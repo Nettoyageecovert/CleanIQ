@@ -1,7 +1,7 @@
-import { useState, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useEffect, useState, useRef } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import EmployerSidebar from '../components/EmployerSidebar';
-import { createQuiz } from '../api/quiz';
+import { createQuiz, fetchQuizById, updateQuiz } from '../api/quiz';
 
 interface QuizOption {
   id: string;
@@ -69,6 +69,8 @@ const createEmptyQuestion = (): Question => ({
 
 export default function QuizCreatorPage() {
   const navigate = useNavigate();
+  const { quizId } = useParams<{ quizId?: string }>();
+  const isEditMode = Boolean(quizId);
   const fileInputRefs = useRef<Record<string, HTMLInputElement | null>>({});
 
   const [settings, setSettings] = useState<QuizSettings>({
@@ -81,7 +83,45 @@ export default function QuizCreatorPage() {
 
   const [questions, setQuestions] = useState<Question[]>([createEmptyQuestion()]);
   const [isPublishing, setIsPublishing] = useState(false);
+  const [isLoadingQuiz, setIsLoadingQuiz] = useState(isEditMode);
+  const [loadError, setLoadError] = useState('');
   const [publishError, setPublishError] = useState('');
+
+  useEffect(() => {
+    if (!quizId) return;
+
+    const loadQuiz = async () => {
+      setIsLoadingQuiz(true);
+      setLoadError('');
+      try {
+        const quiz = await fetchQuizById(quizId);
+        setSettings({
+          title: quiz.title,
+          category: quiz.category,
+          relatedCourse: quiz.relatedCourse,
+          timeLimit: quiz.timeLimit,
+          passingPercent: quiz.passingPercent,
+        });
+        setQuestions(
+          quiz.questions.length > 0
+            ? quiz.questions.map(q => {
+                const options = [...q.options];
+                while (options.length < 4) {
+                  options.push(createEmptyOption());
+                }
+                return { ...q, options: options.slice(0, 4) };
+              })
+            : [createEmptyQuestion()],
+        );
+      } catch {
+        setLoadError('Unable to load quiz for editing.');
+      } finally {
+        setIsLoadingQuiz(false);
+      }
+    };
+
+    loadQuiz();
+  }, [quizId]);
 
   const updateSettings = (key: keyof QuizSettings, value: string | number) => {
     setSettings(prev => ({ ...prev, [key]: value }));
@@ -137,7 +177,7 @@ export default function QuizCreatorPage() {
 
     setIsPublishing(true);
     try {
-      await createQuiz({
+      const payload = {
         title: settings.title.trim(),
         category: settings.category,
         relatedCourse: settings.relatedCourse,
@@ -147,14 +187,41 @@ export default function QuizCreatorPage() {
           ...q,
           image: q.image?.startsWith('blob:') ? null : q.image,
         })),
-      });
+      };
+
+      if (isEditMode && quizId) {
+        await updateQuiz(quizId, payload);
+      } else {
+        await createQuiz(payload);
+      }
       navigate('/employer/dashboard');
     } catch {
-      setPublishError('Failed to publish quiz. Please try again.');
+      setPublishError(isEditMode ? 'Failed to save quiz changes. Please try again.' : 'Failed to publish quiz. Please try again.');
     } finally {
       setIsPublishing(false);
     }
   };
+
+  if (isLoadingQuiz) {
+    return (
+      <div className="theme-page min-h-screen flex items-center justify-center theme-muted" style={{ fontFamily: 'Inter, sans-serif' }}>
+        Loading quiz...
+      </div>
+    );
+  }
+
+  if (loadError) {
+    return (
+      <div className="theme-page min-h-screen flex flex-col items-center justify-center gap-4" style={{ fontFamily: 'Inter, sans-serif' }}>
+        <p style={{ color: '#ba1a1a' }}>{loadError}</p>
+        <button onClick={() => navigate('/employer/dashboard')}
+          className="px-5 py-2.5 rounded-xl text-[14px] font-bold"
+          style={{ background: '#172a1e', color: '#ffffff' }}>
+          Back to Dashboard
+        </button>
+      </div>
+    );
+  }
 
   return (
     <div className="theme-page min-h-screen" style={{ fontFamily: 'Inter, sans-serif' }}>
@@ -185,13 +252,17 @@ export default function QuizCreatorPage() {
               <nav className="flex items-center gap-1 mb-2">
                 <span className="text-[12px] font-bold uppercase tracking-wider theme-muted">Admin Console</span>
                 <span className="material-symbols-outlined text-[14px] theme-muted">chevron_right</span>
-                <span className="text-[12px] font-bold uppercase tracking-wider theme-text-primary">Quiz Creator</span>
+                <span className="text-[12px] font-bold uppercase tracking-wider theme-text-primary">
+                  {isEditMode ? 'Edit Quiz' : 'Quiz Creator'}
+                </span>
               </nav>
               <h2 className="text-[32px] font-bold theme-text-primary" style={{ fontFamily: 'Manrope, sans-serif' }}>
-                Create New Quiz
+                {isEditMode ? 'Edit Quiz' : 'Create New Quiz'}
               </h2>
               <p className="text-[15px] mt-1 theme-text-secondary">
-                Design professional assessments for your employees.
+                {isEditMode
+                  ? 'Update questions, settings, and passing requirements.'
+                  : 'Design professional assessments for your employees.'}
               </p>
             </div>
             <div className="flex gap-3 shrink-0">
@@ -473,7 +544,9 @@ export default function QuizCreatorPage() {
               style={{ background: '#172a1e', color: '#ffffff' }}
               onMouseEnter={e => { if (!isPublishing) e.currentTarget.style.background = '#2d4033'; }}
               onMouseLeave={e => { e.currentTarget.style.background = '#172a1e'; }}>
-              {isPublishing ? 'Publishing...' : 'Complete & Publish Quiz'}
+              {isPublishing
+                ? (isEditMode ? 'Saving...' : 'Publishing...')
+                : (isEditMode ? 'Save Changes' : 'Complete & Publish Quiz')}
             </button>
           </div>
         </main>
