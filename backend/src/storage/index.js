@@ -1,17 +1,19 @@
 const MemoryUserStore = require('./memoryUserStore');
 const SupabaseUserStore = require('./supabaseUserStore');
 const QuizStore = require('./quizStore');
+const SupabaseQuizStore = require('./supabaseQuizStore');
 
 let userStore;
 let quizStore;
+
+const getStorageType = () => (process.env.USER_STORE || 'memory').toLowerCase();
 
 const getUserStore = () => {
   if (userStore) {
     return userStore;
   }
 
-  const storageType = (process.env.USER_STORE || 'memory').toLowerCase();
-  userStore = storageType === 'supabase' ? new SupabaseUserStore() : new MemoryUserStore();
+  userStore = getStorageType() === 'supabase' ? new SupabaseUserStore() : new MemoryUserStore();
   return userStore;
 };
 
@@ -20,7 +22,8 @@ const getQuizStore = () => {
     return quizStore;
   }
 
-  quizStore = new QuizStore();
+  const quizStorage = (process.env.QUIZ_STORE || process.env.USER_STORE || 'memory').toLowerCase();
+  quizStore = quizStorage === 'supabase' ? new SupabaseQuizStore() : new QuizStore();
   return quizStore;
 };
 

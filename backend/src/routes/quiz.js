@@ -34,8 +34,13 @@ router.post('/', authenticate, requireEmployer, async (req, res) => {
     return res.status(400).json({ message: 'Missing required quiz fields.' });
   }
 
-  const quiz = await quizStore.createQuiz({ title, category, relatedCourse, timeLimit, passingPercent, questions });
-  res.status(201).json({ quiz });
+  try {
+    const quiz = await quizStore.createQuiz({ title, category, relatedCourse, timeLimit, passingPercent, questions });
+    res.status(201).json({ quiz });
+  } catch (error) {
+    console.error('Create quiz error:', error);
+    res.status(500).json({ message: 'Unable to save quiz.' });
+  }
 });
 
 router.get('/attempts/detail/:attemptId', async (req, res) => {
@@ -74,20 +79,25 @@ router.put('/:id', authenticate, requireEmployer, async (req, res) => {
     return res.status(400).json({ message: 'Missing required quiz fields.' });
   }
 
-  const quiz = await quizStore.updateQuiz(req.params.id, {
-    title,
-    category,
-    relatedCourse,
-    timeLimit,
-    passingPercent,
-    questions,
-  });
+  try {
+    const quiz = await quizStore.updateQuiz(req.params.id, {
+      title,
+      category,
+      relatedCourse,
+      timeLimit,
+      passingPercent,
+      questions,
+    });
 
-  if (!quiz) {
-    return res.status(404).json({ message: 'Quiz not found.' });
+    if (!quiz) {
+      return res.status(404).json({ message: 'Quiz not found.' });
+    }
+
+    res.json({ quiz });
+  } catch (error) {
+    console.error('Update quiz error:', error);
+    res.status(500).json({ message: 'Unable to update quiz.' });
   }
-
-  res.json({ quiz });
 });
 
 router.post('/attempts', async (req, res) => {
@@ -95,15 +105,20 @@ router.post('/attempts', async (req, res) => {
   if (!userId || !quizId || typeof score !== 'number' || typeof passingPercent !== 'number') {
     return res.status(400).json({ message: 'Missing required attempt fields.' });
   }
-  const attempt = await quizStore.createAttempt({
-    userId,
-    quizId,
-    score,
-    passingPercent,
-    answers,
-    timeTakenSeconds,
-  });
-  res.status(201).json({ attempt });
+  try {
+    const attempt = await quizStore.createAttempt({
+      userId,
+      quizId,
+      score,
+      passingPercent,
+      answers,
+      timeTakenSeconds,
+    });
+    res.status(201).json({ attempt });
+  } catch (error) {
+    console.error('Create attempt error:', error);
+    res.status(500).json({ message: 'Unable to save quiz attempt.' });
+  }
 });
 
 module.exports = router;
