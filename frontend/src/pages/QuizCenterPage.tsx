@@ -112,8 +112,6 @@ export default function QuizCenterPage() {
       <Sidebar />
 
       <main className="lg:ml-72 min-h-screen">
-
-        {/* Header */}
         <header className="theme-header-bar h-20 flex items-center justify-between px-8 sticky top-0 z-40 border-b">
           <h1 className="text-[24px] font-bold theme-text-primary" style={{ fontFamily: 'Manrope, sans-serif' }}>
             Quiz Center
@@ -139,8 +137,6 @@ export default function QuizCenterPage() {
         </header>
 
         <div className="max-w-[1200px] mx-auto px-8 py-10 space-y-8">
-
-          {/* Page Title + Stats */}
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
             <div>
               <h2 className="text-[48px] font-bold leading-tight theme-text-primary"
@@ -172,8 +168,6 @@ export default function QuizCenterPage() {
               </div>
             </div>
           </div>
-
-          {/* Tabs */}
           <div className="flex border-b border-[#e1e4e0]/40">
             {(['past', 'upcoming'] as const).map(tab => (
               <button key={tab} onClick={() => setActiveTab(tab)}
@@ -187,8 +181,6 @@ export default function QuizCenterPage() {
               </button>
             ))}
           </div>
-
-          {/* Search + Filter */}
           <div className="flex gap-3">
             <div className="relative flex-1">
               <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-[20px]"
@@ -211,8 +203,6 @@ export default function QuizCenterPage() {
               Filter
             </button>
           </div>
-
-          {/* Quiz List */}
           <div className="space-y-3">
             {isLoading ? (
               <div className="text-center py-16" style={{ color: '#737873' }}>
@@ -287,8 +277,6 @@ export default function QuizCenterPage() {
 
 
         </div>
-
-        {/* Footer */}
         <footer className="theme-footer py-10 px-8 mt-8 border-t">
           <div className="max-w-[1200px] mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
             <div>

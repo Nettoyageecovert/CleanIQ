@@ -134,8 +134,6 @@ export default function CourseManagementPage() {
       <EmployerSidebar />
 
       <div className="lg:ml-72 flex flex-col min-h-screen">
-
-        {/* Top Bar */}
         <header className="theme-header-bar h-20 sticky top-0 z-40 flex items-center justify-between px-8 border-b">
           <h1 className="text-[22px] font-bold theme-text-primary" style={{ fontFamily: 'Manrope, sans-serif' }}>
             CleanIQ Admin
@@ -152,8 +150,6 @@ export default function CourseManagementPage() {
         </header>
 
         <main className="flex-1 px-8 py-10 max-w-[1100px] mx-auto w-full">
-
-          {/* Page Header */}
           <div className="mb-10">
             <nav className="flex items-center gap-1 mb-2">
               <span className="text-[12px] font-bold uppercase tracking-wider theme-muted">Admin Console</span>
@@ -167,14 +163,8 @@ export default function CourseManagementPage() {
               Design an immersive learning experience. Fill in the details, structure your curriculum, and configure settings.
             </p>
           </div>
-
-          {/* Bento Grid */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-
-            {/* Left Column */}
             <div className="lg:col-span-8 flex flex-col gap-6">
-
-              {/* Course Foundations */}
               <section className="theme-section-card rounded-2xl p-6 border"
                 style={{ boxShadow: '0 4px 20px rgba(45,64,51,0.05)', borderColor: 'var(--border-subtle)' }}>
                 <div className="flex items-center gap-3 mb-6">
@@ -215,8 +205,6 @@ export default function CourseManagementPage() {
                   </div>
                 </div>
               </section>
-
-              {/* Curriculum Structure */}
               <section className="theme-section-card rounded-2xl p-6 border"
                 style={{ boxShadow: '0 4px 20px rgba(45,64,51,0.05)', borderColor: 'var(--border-subtle)' }}>
                 <div className="flex items-center justify-between mb-6">
@@ -325,11 +313,7 @@ export default function CourseManagementPage() {
                 </div>
               </section>
             </div>
-
-            {/* Right Column */}
             <div className="lg:col-span-4 flex flex-col gap-6">
-
-              {/* Course Aesthetic */}
               <section className="theme-section-card rounded-2xl p-6 border"
                 style={{ boxShadow: '0 4px 20px rgba(45,64,51,0.05)', borderColor: 'var(--border-subtle)' }}>
                 <div className="flex items-center gap-3 mb-5">
@@ -364,8 +348,6 @@ export default function CourseManagementPage() {
                   </p>
                 </div>
               </section>
-
-              {/* Configuration */}
               <section className="theme-section-card rounded-2xl p-6 border"
                 style={{ boxShadow: '0 4px 20px rgba(45,64,51,0.05)', borderColor: 'var(--border-subtle)' }}>
                 <div className="flex items-center gap-3 mb-5">
@@ -414,8 +396,6 @@ export default function CourseManagementPage() {
               </section>
             </div>
           </div>
-
-          {/* Action Bar */}
           <div className="theme-action-bar mt-10 flex flex-col md:flex-row justify-between items-center gap-4 p-6 rounded-2xl border"
             style={{ boxShadow: '0 8px 30px rgba(0,0,0,0.06)' }}>
             <div className="flex items-center gap-3">
@@ -440,8 +420,6 @@ export default function CourseManagementPage() {
             </div>
           </div>
         </main>
-
-        {/* Footer */}
         <footer className="theme-footer mt-8 py-8 px-8 border-t">
           <div className="max-w-[1100px] mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
             <div className="flex items-center gap-2">

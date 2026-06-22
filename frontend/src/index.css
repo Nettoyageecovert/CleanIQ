@@ -257,8 +257,6 @@ body {
 [data-theme="dark"] .theme-sidebar .font-bold.leading-none {
   color: var(--text-primary) !important;
 }
-
-/* ── Fix hardcoded inline text colors in dark mode ── */
 [data-theme="dark"] .theme-page :is(main, header) h1,
 [data-theme="dark"] .theme-page :is(main, header) h2,
 [data-theme="dark"] .theme-page main h3,
@@ -278,8 +276,6 @@ body {
 [data-theme="dark"] .theme-page main nav span:last-child {
   color: var(--text-primary) !important;
 }
-
-/* Hero / gradient banners keep their light text */
 [data-theme="dark"] .theme-page main section[style*="linear-gradient"] h2,
 [data-theme="dark"] .theme-page main section[style*="linear-gradient"] h3 {
   color: #ffffff !important;
@@ -297,8 +293,6 @@ body {
 [data-theme="dark"] .theme-page main section[style*="linear-gradient"] button {
   color: inherit;
 }
-
-/* Section icons next to headings */
 [data-theme="dark"] .theme-page main .material-symbols-outlined {
   color: var(--text-primary) !important;
 }
@@ -307,8 +301,6 @@ body {
 [data-theme="dark"] .theme-page main .theme-stat-icon .material-symbols-outlined {
   color: inherit !important;
 }
-
-/* Form fields */
 [data-theme="dark"] .theme-page input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
 [data-theme="dark"] .theme-page textarea,
 [data-theme="dark"] .theme-page select {
@@ -321,8 +313,6 @@ body {
 [data-theme="dark"] .theme-page textarea::placeholder {
   color: var(--text-muted) !important;
 }
-
-/* White cards → dark cards */
 [data-theme="dark"] .theme-page .bg-white {
   background-color: var(--bg-card) !important;
   border-color: var(--border-subtle) !important;
@@ -340,8 +330,6 @@ body {
 [data-theme="dark"] .theme-page .bg-white label {
   color: var(--text-secondary) !important;
 }
-
-/* Footer text */
 [data-theme="dark"] .theme-footer span,
 [data-theme="dark"] .theme-footer p,
 [data-theme="dark"] .theme-footer a {
@@ -352,8 +340,6 @@ body {
 [data-theme="dark"] .theme-footer .font-bold {
   color: var(--text-primary) !important;
 }
-
-/* Preserve intentional accent colors on badges/buttons */
 [data-theme="dark"] .theme-page [style*="background: #2d4033"],
 [data-theme="dark"] .theme-page [style*="background: #ba1a1a"],
 [data-theme="dark"] .theme-page [style*="background: #172a1e"],
@@ -362,7 +348,6 @@ body {
 [data-theme="dark"] .theme-page [style*="background: #fbddc7"],
 [data-theme="dark"] .theme-page [style*="background: #e3e2df"],
 [data-theme="dark"] .theme-page [style*="background: #ffdad6"] {
-  /* keep inline bg; text inside handled below */
 }
 
 [data-theme="dark"] .theme-page [style*="background: #2d4033"] span,
@@ -387,8 +372,6 @@ body {
 [data-theme="dark"] .theme-page a[style*="background: #d2e8d6"] {
   color: #172a1e !important;
 }
-
-/* Inline light backgrounds → dark panels */
 [data-theme="dark"] .theme-page [style*="background: #f4f4f0"],
 [data-theme="dark"] .theme-page [style*="background: #efeeea"],
 [data-theme="dark"] .theme-page [style*="background: #faf9f5"] {
@@ -398,13 +381,9 @@ body {
 [data-theme="dark"] .theme-page [style*="background: rgba(255,255,255"] {
   background-color: var(--bg-panel) !important;
 }
-
-/* Range slider accent in dark mode */
 [data-theme="dark"] .theme-page input[type="range"] {
   accent-color: #b6ccba;
 }
-
-/* Reusable dark-mode-safe components */
 .theme-dropzone {
   border: 2px dashed var(--border);
   background: var(--bg-panel);
@@ -459,8 +438,6 @@ body {
   background: var(--bg-panel) !important;
   border-color: var(--border) !important;
 }
-
-/* Inline white backgrounds (React renders as rgb) */
 [data-theme="dark"] .theme-page [style*="background: rgb(255, 255, 255)"],
 [data-theme="dark"] .theme-page [style*="background:#ffffff"],
 [data-theme="dark"] .theme-page [style*="background: #ffffff"] {
@@ -517,8 +494,6 @@ body {
 [data-theme="dark"] .theme-tip .material-symbols-outlined {
   color: #d2e8d6 !important;
 }
-
-/* Semantic icon circles, badges, and segmented controls */
 .theme-icon-circle {
   display: flex;
   align-items: center;

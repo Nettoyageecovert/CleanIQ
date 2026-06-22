@@ -59,18 +59,12 @@ export default function LoginPage() {
 
       <div className="w-full max-w-[440px] z-10">
         <div ref={cardRef} className="rounded-xl p-6 flex flex-col items-center"
-          style={{ background: 'rgba(255,255,255,0.85)', backdropFilter: 'blur(12px)', border: '1px solid rgba(255,255,255,0.5)', boxShadow: '0 8px 32px rgba(45,64,51,0.06)' }}>
-
-          {/* Logo */}
-          <div className="mb-2 transition-transform duration-500 hover:scale-105">
+          style={{ background: 'rgba(255,255,255,0.85)', backdropFilter: 'blur(12px)', border: '1px solid rgba(255,255,255,0.5)', boxShadow: '0 8px 32px rgba(45,64,51,0.06)' }}>          <div className="mb-2 transition-transform duration-500 hover:scale-105">
             <div className="w-14 h-14 rounded-full flex items-center justify-center"
               style={{ background: '#172a1e' }}>
               <span className="material-symbols-outlined text-[28px]" style={{ color: '#ffffff' }}>cleaning_services</span>
             </div>
-          </div>
-
-          {/* Heading */}
-          <div className="text-center mb-4">
+          </div>          <div className="text-center mb-4">
             <h1 className="text-[26px] leading-8 font-semibold mb-1"
               style={{ fontFamily: 'Manrope, sans-serif', color: '#172a1e' }}>
               Welcome Back
@@ -78,22 +72,13 @@ export default function LoginPage() {
             <p className="text-[14px] leading-5" style={{ color: '#434843' }}>
               Continue your professional training journey.
             </p>
-          </div>
-
-          {/* Error banner */}
-          {error && (
+          </div>          {error && (
             <div className="w-full mb-3 px-3 py-2 rounded-lg text-sm flex items-center gap-2"
               style={{ background: '#ffdad6', color: '#93000a' }}>
               <span className="material-symbols-outlined text-[16px]">error</span>
               {error}
             </div>
-          )}
-
-          {/* Form */}
-          <form className="w-full space-y-3" onSubmit={handleSubmit}>
-
-            {/* Email */}
-            <div className="space-y-1">
+          )}          <form className="w-full space-y-3" onSubmit={handleSubmit}>            <div className="space-y-1">
               <label className="text-[13px] font-medium ml-1 block" htmlFor="email"
                 style={{ color: '#434843' }}>
                 Email Address
@@ -110,10 +95,7 @@ export default function LoginPage() {
                   onBlur={e => { e.target.style.borderColor = '#c3c8c1'; e.target.style.boxShadow = 'none'; }}
                   required />
               </div>
-            </div>
-
-            {/* Password */}
-            <div className="space-y-1">
+            </div>            <div className="space-y-1">
               <div className="flex justify-between items-center ml-1">
                 <label className="text-[13px] font-medium block" htmlFor="password"
                   style={{ color: '#434843' }}>
@@ -145,10 +127,7 @@ export default function LoginPage() {
                   </span>
                 </button>
               </div>
-            </div>
-
-            {/* Keep me signed in */}
-            <div className="flex items-center gap-2 pl-1">
+            </div>            <div className="flex items-center gap-2 pl-1">
               <input className="w-4 h-4 rounded cursor-pointer"
                 style={{ accentColor: '#172a1e' }}
                 id="remember" type="checkbox" />
@@ -156,10 +135,7 @@ export default function LoginPage() {
                 style={{ color: '#434843' }}>
                 Keep me signed in
               </label>
-            </div>
-
-            {/* Submit */}
-            <div className="pt-2">
+            </div>            <div className="pt-2">
               <button
                 className="w-full py-3 rounded-lg text-[16px] font-semibold flex items-center justify-center gap-2 transition-all duration-300 active:scale-[0.98] disabled:opacity-60"
                 style={{ fontFamily: 'Manrope, sans-serif', background: '#172a1e', color: '#ffffff' }}
@@ -173,10 +149,7 @@ export default function LoginPage() {
                 )}
               </button>
             </div>
-          </form>
-
-          {/* Footer link */}
-          <div className="mt-4 pt-4 border-t w-full text-center" style={{ borderColor: '#c3c8c1' }}>
+          </form>          <div className="mt-4 pt-4 border-t w-full text-center" style={{ borderColor: '#c3c8c1' }}>
             <p className="text-[14px]" style={{ color: '#434843' }}>
               Don't have an account?{' '}
               <Link to="/register" className="font-bold hover:underline" style={{ color: '#172a1e' }}>
@@ -190,10 +163,7 @@ export default function LoginPage() {
               </Link>
             </p>
           </div>
-        </div>
-
-        {/* Policy footer */}
-        <footer className="mt-3 text-center">
+        </div>        <footer className="mt-3 text-center">
           <div className="flex justify-center gap-6 uppercase tracking-wider text-[11px]" style={{ color: '#737873' }}>
             <a className="hover:text-[#172a1e] transition-colors" href="#">Privacy Policy</a>
             <span className="w-1 h-1 rounded-full self-center" style={{ background: '#c3c8c1' }} />

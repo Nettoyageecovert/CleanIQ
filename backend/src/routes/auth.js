@@ -4,8 +4,6 @@ const { register, login, updateProfile, changePassword, getMe } = require('../co
 const { authenticate } = require('../middleware/authMiddleware');
 
 const router = express.Router();
-
-// Validation rules for registration
 const registerValidation = [
   body('fullName')
     .trim()
@@ -19,14 +17,10 @@ const registerValidation = [
     .matches(/(?=.*[a-zA-Z])(?=.*[0-9])/)
     .withMessage('Password must contain at least one letter and one number.'),
 ];
-
-// Validation rules for login
 const loginValidation = [
   body('email').isEmail().withMessage('Please enter a valid email address.'),
   body('password').notEmpty().withMessage('Password is required.'),
 ];
-
-// Routes
 router.post('/register', registerValidation, register);
 router.post('/login', loginValidation, login);
 router.get('/me', authenticate, getMe);

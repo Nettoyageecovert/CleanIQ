@@ -33,7 +33,7 @@ export function loadUserPrefs(userId: string | undefined): UserPrefs {
         language: normalizeLanguage(parsed.language),
       };
     }
-  } catch { /* ignore */ }
+  } catch {}
   return { ...DEFAULT_PREFS };
 }
 

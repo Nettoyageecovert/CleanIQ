@@ -43,18 +43,12 @@ export default function ForgotPasswordPage() {
 
       <div className="w-full max-w-[440px] z-10">
         <div ref={cardRef} className="rounded-xl p-6 flex flex-col items-center"
-          style={{ background: 'rgba(255,255,255,0.85)', backdropFilter: 'blur(12px)', border: '1px solid rgba(255,255,255,0.5)', boxShadow: '0 8px 32px rgba(45,64,51,0.06)' }}>
-
-          {/* Icon */}
-          <div className="mb-2 transition-transform duration-500 hover:scale-105">
+          style={{ background: 'rgba(255,255,255,0.85)', backdropFilter: 'blur(12px)', border: '1px solid rgba(255,255,255,0.5)', boxShadow: '0 8px 32px rgba(45,64,51,0.06)' }}>          <div className="mb-2 transition-transform duration-500 hover:scale-105">
             <div className="w-14 h-14 rounded-full flex items-center justify-center"
               style={{ background: '#d2e8d6' }}>
               <span className="material-symbols-outlined text-[28px]" style={{ color: '#172a1e' }}>lock_reset</span>
             </div>
-          </div>
-
-          {/* Heading */}
-          <div className="text-center mb-4">
+          </div>          <div className="text-center mb-4">
             <h1 className="text-[26px] leading-8 font-semibold mb-1"
               style={{ fontFamily: 'Manrope, sans-serif', color: '#172a1e' }}>
               Reset Password
@@ -62,10 +56,7 @@ export default function ForgotPasswordPage() {
             <p className="text-[14px] leading-5" style={{ color: '#434843' }}>
               Enter your email to receive a password reset link.
             </p>
-          </div>
-
-          {/* Success State */}
-          {submitted ? (
+          </div>          {submitted ? (
             <div className="w-full">
               <div className="w-full mb-4 px-4 py-4 rounded-lg flex flex-col items-center gap-2 text-center"
                 style={{ background: '#d2e8d6', color: '#172a1e' }}>
@@ -85,18 +76,13 @@ export default function ForgotPasswordPage() {
               </Link>
             </div>
           ) : (
-            <>
-              {/* Error banner */}
-              {error && (
+            <>              {error && (
                 <div className="w-full mb-3 px-3 py-2 rounded-lg text-sm flex items-center gap-2"
                   style={{ background: '#ffdad6', color: '#93000a' }}>
                   <span className="material-symbols-outlined text-[16px]">error</span>
                   {error}
                 </div>
-              )}
-
-              {/* Form */}
-              <form className="w-full space-y-3" onSubmit={handleSubmit}>
+              )}              <form className="w-full space-y-3" onSubmit={handleSubmit}>
                 <div className="space-y-1">
                   <label className="text-[13px] font-medium ml-1 block" htmlFor="email"
                     style={{ color: '#434843' }}>

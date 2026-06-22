@@ -168,7 +168,6 @@ export default function EmployeeAnalyticsPage() {
               </div>
 
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                {/* Score trend */}
                 <section className="bg-white rounded-xl p-8 border border-[#e1e4e0]/40"
                   style={{ boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}>
                   <div className="flex items-center justify-between mb-6">
@@ -215,8 +214,6 @@ export default function EmployeeAnalyticsPage() {
                     </div>
                   )}
                 </section>
-
-                {/* Category breakdown */}
                 <section className="bg-white rounded-xl p-8 border border-[#e1e4e0]/40"
                   style={{ boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}>
                   <h3 className="text-[20px] font-bold mb-1" style={{ fontFamily: 'Manrope, sans-serif', color: '#172a1e' }}>
@@ -251,8 +248,6 @@ export default function EmployeeAnalyticsPage() {
                   )}
                 </section>
               </div>
-
-              {/* Summary insight */}
               <section className="rounded-xl p-8 border border-[#e1e4e0]/40 flex flex-col md:flex-row items-start md:items-center gap-6"
                 style={{ background: 'linear-gradient(135deg, #172a1e 0%, #2d4033 100%)' }}>
                 <div className="w-14 h-14 rounded-xl flex items-center justify-center shrink-0"

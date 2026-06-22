@@ -4,8 +4,6 @@ const api = axios.create({
   baseURL: '/api',
   headers: { 'Content-Type': 'application/json' },
 });
-
-// Automatically attach the login token to every request
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem('token');
   if (token) {
@@ -26,8 +24,6 @@ export interface AuthResponse {
   token: string;
   user: AuthUser;
 }
-
-// Register a new user
 export const registerUser = async (data: {
   fullName: string;
   email: string;
@@ -36,8 +32,6 @@ export const registerUser = async (data: {
   const response = await api.post<AuthResponse>('/auth/register', data);
   return response.data;
 };
-
-// Login an existing user
 export const loginUser = async (data: {
   email: string;
   password: string;

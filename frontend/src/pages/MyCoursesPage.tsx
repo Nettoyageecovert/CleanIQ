@@ -86,8 +86,6 @@ export default function MyCoursesPage() {
       <Sidebar />
 
       <main className="lg:ml-72 min-h-screen flex flex-col">
-
-        {/* Header */}
         <header className="theme-header-bar h-20 flex items-center justify-between px-8 sticky top-0 z-40 border-b">
           <h1 className="text-[24px] font-bold" style={{ fontFamily: 'Manrope, sans-serif', color: '#172a1e' }}>
             My Courses
@@ -123,8 +121,6 @@ export default function MyCoursesPage() {
             </div>
           </div>
         </header>
-
-        {/* Hero Banner */}
         <section className="px-8 pt-6 pb-10">
           <div className="relative w-full h-[320px] rounded-[24px] overflow-hidden"
             style={{ background: 'linear-gradient(135deg, #172a1e 0%, #2d4033 60%, #344022 100%)' }}>
@@ -171,10 +167,7 @@ export default function MyCoursesPage() {
             </div>
           </div>
         </section>
-
-        {/* Course Grid */}
         <section className="px-8 pb-12 max-w-[1200px] mx-auto w-full">
-          {/* Filters */}
           <div className="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
             <div className="theme-filter-tabs">
               {([['all', 'All Courses'], ['in-progress', 'In Progress'], ['completed', 'Completed']] as const).map(([val, label]) => (
@@ -194,8 +187,6 @@ export default function MyCoursesPage() {
               </select>
             </div>
           </div>
-
-          {/* Cards */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredCourses.map(course => (
               <div key={course.id}
@@ -242,8 +233,6 @@ export default function MyCoursesPage() {
             
           </div>
         </section>
-
-        {/* Footer */}
         <footer className="theme-footer py-10 px-8 mt-auto border-t">
           <div className="max-w-[1200px] mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
             <div>

@@ -139,7 +139,6 @@ export default function QuizReviewPage() {
         </header>
 
         <div className="max-w-[860px] mx-auto px-8 py-10 space-y-8">
-          {/* Score Summary Card */}
           <div className="rounded-2xl overflow-hidden"
             style={{ background: 'linear-gradient(135deg, #172a1e 0%, #2d4033 100%)', boxShadow: '0 10px 40px rgba(23,42,30,0.15)' }}>
             <div className="p-8">
@@ -208,8 +207,6 @@ export default function QuizReviewPage() {
               Detailed answer breakdown is not available for this attempt. Retake the quiz to record your answers.
             </div>
           )}
-
-          {/* Questions Review */}
           <div className="space-y-4">
             <h3 className="text-[22px] font-bold" style={{ fontFamily: 'Manrope, sans-serif', color: '#172a1e' }}>
               Question Breakdown
@@ -298,8 +295,6 @@ export default function QuizReviewPage() {
               );
             })}
           </div>
-
-          {/* Bottom Actions */}
           <div className="flex flex-col sm:flex-row gap-4 pt-4">
             <button onClick={() => navigate('/employee/quiz')}
               className="flex-1 py-3 rounded-xl text-[15px] font-bold border transition-all flex items-center justify-center gap-2"

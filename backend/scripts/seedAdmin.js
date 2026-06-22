@@ -1,8 +1,3 @@
-/**
- * Creates the default employer/admin account in Supabase.
- * Run once after schema.sql:
- *   node scripts/seedAdmin.js
- */
 require('dotenv').config({ path: require('path').join(__dirname, '..', '.env') });
 const bcrypt = require('bcryptjs');
 const { createClient } = require('@supabase/supabase-js');

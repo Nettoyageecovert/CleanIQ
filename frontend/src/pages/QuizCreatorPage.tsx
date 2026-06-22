@@ -231,8 +231,6 @@ export default function QuizCreatorPage() {
       <EmployerSidebar />
 
       <div className="lg:ml-72 flex flex-col min-h-screen">
-
-        {/* Top Bar */}
         <header className="theme-header-bar h-20 sticky top-0 z-40 flex items-center justify-between px-8 border-b">
           <h1 className="text-[22px] font-bold theme-text-primary" style={{ fontFamily: 'Manrope, sans-serif' }}>
             CleanIQ Admin
@@ -245,8 +243,6 @@ export default function QuizCreatorPage() {
         </header>
 
         <main className="flex-1 px-8 py-10 max-w-[1000px] mx-auto w-full">
-
-          {/* Page Header */}
           <div className="mb-10 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
             <div>
               <nav className="flex items-center gap-1 mb-2">
@@ -281,8 +277,6 @@ export default function QuizCreatorPage() {
               </button>
             </div>
           </div>
-
-          {/* General Settings */}
           <section className="mb-10">
             <div className="flex items-center gap-3 mb-5">
               <span className="material-symbols-outlined text-[22px] theme-text-primary">settings</span>
@@ -349,8 +343,6 @@ export default function QuizCreatorPage() {
               </div>
             </div>
           </section>
-
-          {/* Question Builder */}
           <section className="mb-10">
             <div className="flex items-center justify-between mb-5">
               <div className="flex items-center gap-3">
@@ -378,8 +370,6 @@ export default function QuizCreatorPage() {
                   </div>
 
                   <div className="ml-4 p-6 space-y-5">
-
-                    {/* Question text */}
                     <div className="flex items-start justify-between gap-4">
                       <div className="flex-1">
                         <label className="text-[12px] font-bold uppercase tracking-wider block mb-2 theme-muted">
@@ -402,8 +392,6 @@ export default function QuizCreatorPage() {
                         </button>
                       )}
                     </div>
-
-                    {/* Image Upload */}
                     <div>
                       <label className="text-[12px] font-bold uppercase tracking-wider block mb-2 theme-muted">
                         Question Image
@@ -451,8 +439,6 @@ export default function QuizCreatorPage() {
                           if (file) handleQuestionImage(question.id, file);
                         }} />
                     </div>
-
-                    {/* Answer Options */}
                     <div>
                       <div className="flex items-center justify-between mb-3">
                         <label className="text-[12px] font-bold uppercase tracking-wider theme-muted">
@@ -526,8 +512,6 @@ export default function QuizCreatorPage() {
               </button>
             </div>
           </section>
-
-          {/* Action Bar */}
           <div className="pt-8 border-t border-[#e1e4e0]/40 flex flex-col sm:flex-row justify-end items-end sm:items-center gap-4">
             {publishError && (
               <p className="text-[14px] mr-auto" style={{ color: '#ba1a1a' }}>{publishError}</p>
@@ -550,8 +534,6 @@ export default function QuizCreatorPage() {
             </button>
           </div>
         </main>
-
-        {/* Footer */}
         <footer className="theme-footer mt-8 py-8 px-8 border-t">
           <div className="max-w-[1000px] mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
             <div className="flex items-center gap-2">

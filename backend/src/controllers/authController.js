@@ -2,8 +2,6 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { validationResult } = require('express-validator');
 const { getUserStore } = require('../storage');
-
-// Helper: Generate JWT token
 const generateToken = (user) => {
   return jwt.sign(
     { id: user.id, email: user.email, role: user.role },
@@ -11,8 +9,6 @@ const generateToken = (user) => {
     { expiresIn: '7d' }
   );
 };
-
-// REGISTER - POST /api/auth/register
 const register = async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -24,17 +20,11 @@ const register = async (req, res) => {
   try {
     const userStore = getUserStore();
     const normalizedEmail = email.toLowerCase().trim();
-
-    // Check if email already exists
     const existingUser = await userStore.findByEmail(normalizedEmail);
     if (existingUser) {
       return res.status(409).json({ message: 'An account with this email already exists.' });
     }
-
-    // Hash the password
     const passwordHash = await bcrypt.hash(password, 10);
-
-    // Create new user
     const newUser = await userStore.createEmployee({
       fullName: fullName.trim(),
       email: normalizedEmail,
@@ -58,8 +48,6 @@ const register = async (req, res) => {
     return res.status(500).json({ message: 'Server error. Please try again.' });
   }
 };
-
-// LOGIN - POST /api/auth/login
 const login = async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -104,8 +92,6 @@ const toPublicUser = (user) => ({
   email: user.email,
   role: user.role,
 });
-
-// GET /api/auth/me
 const getMe = async (req, res) => {
   try {
     const userStore = getUserStore();
@@ -119,8 +105,6 @@ const getMe = async (req, res) => {
     return res.status(500).json({ message: 'Server error. Please try again.' });
   }
 };
-
-// PATCH /api/auth/profile
 const updateProfile = async (req, res) => {
   const { fullName } = req.body;
   if (!fullName?.trim() || fullName.trim().length < 2) {
@@ -143,8 +127,6 @@ const updateProfile = async (req, res) => {
     return res.status(500).json({ message: 'Server error. Please try again.' });
   }
 };
-
-// PATCH /api/auth/password
 const changePassword = async (req, res) => {
   const { currentPassword, newPassword } = req.body;
 

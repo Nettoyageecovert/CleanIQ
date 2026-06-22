@@ -206,8 +206,6 @@ export default function QuizPlayPage() {
       </div>
     );
   }
-
-  // ── Results Screen ────────────────────────────────────────────────────────
   if (finished) {
     return (
       <div className="theme-page min-h-screen" style={{ fontFamily: 'Inter, sans-serif' }}>
@@ -287,8 +285,6 @@ export default function QuizPlayPage() {
       </div>
     );
   }
-
-  // ── Quiz Screen ───────────────────────────────────────────────────────────
   return (
     <div className="theme-page min-h-screen" style={{ fontFamily: 'Inter, sans-serif' }}>
       <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
@@ -297,8 +293,6 @@ export default function QuizPlayPage() {
       <Sidebar />
 
       <main className="lg:ml-72 min-h-screen flex flex-col items-center pt-10 pb-16 px-8">
-
-        {/* Progress Header */}
         <div className="w-full max-w-2xl mb-8">
           <div className="flex justify-between items-end mb-3">
             <div>
@@ -324,8 +318,6 @@ export default function QuizPlayPage() {
               style={{ width: `${progress}%`, background: '#172a1e' }} />
           </div>
         </div>
-
-        {/* Question Card */}
         <section className="w-full max-w-2xl rounded-2xl p-8 relative overflow-hidden"
           style={{ background: '#ffffff', boxShadow: '0 10px 40px rgba(23,42,30,0.08)' }}>
           <div className="absolute -top-8 -right-8 w-28 h-28 rounded-full opacity-20 pointer-events-none"
@@ -384,8 +376,6 @@ export default function QuizPlayPage() {
             </button>
           </div>
         </section>
-
-        {/* Footer */}
         <footer className="w-full max-w-2xl mt-12 pt-6 border-t border-[#e1e4e0]/40">
           <div className="flex flex-col md:flex-row justify-between items-center gap-3">
             <p className="text-[12px]" style={{ color: '#737873' }}>
