@@ -168,26 +168,24 @@ export default function EmployeeAnalyticsPage() {
               </div>
 
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <section className="bg-white rounded-xl p-8 border border-[#e1e4e0]/40"
-                  style={{ boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}>
+                <section className="theme-card rounded-xl p-8 border" style={{ borderColor: 'var(--border-subtle)', boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}>
                   <div className="flex items-center justify-between mb-6">
                     <div>
-                      <h3 className="text-[20px] font-bold" style={{ fontFamily: 'Manrope, sans-serif', color: '#172a1e' }}>
+                      <h3 className="text-[20px] font-bold theme-text-primary" style={{ fontFamily: 'Manrope, sans-serif' }}>
                         Score Trend
                       </h3>
-                      <p className="text-[13px] mt-1" style={{ color: '#737873' }}>
+                      <p className="text-[13px] mt-1 theme-muted">
                         {scoreHistory.length > 0 ? 'Your most recent quiz attempts' : 'Complete a quiz to see your trend'}
                       </p>
                     </div>
                     {bestScore > 0 && (
-                      <span className="px-3 py-1 rounded-full text-[12px] font-bold"
-                        style={{ background: '#d2e8d6', color: '#172a1e' }}>
+                      <span className="px-3 py-1 rounded-full text-[12px] font-bold theme-badge theme-badge--accent">
                         Best: {bestScore}%
                       </span>
                     )}
                   </div>
                   {scoreHistory.length === 0 ? (
-                    <div className="text-center py-12" style={{ color: '#737873' }}>
+                    <div className="text-center py-12 theme-muted">
                       <span className="material-symbols-outlined text-[40px] block mb-2">bar_chart</span>
                       <p className="text-[14px]">No quiz data yet</p>
                     </div>
@@ -196,51 +194,48 @@ export default function EmployeeAnalyticsPage() {
                       {scoreHistory.map(entry => (
                         <div key={entry.id}>
                           <div className="flex justify-between items-center mb-1.5">
-                            <p className="text-[13px] font-medium truncate pr-4" style={{ color: '#1b1c1a' }}>{entry.title}</p>
-                            <span className="text-[13px] font-bold shrink-0" style={{ color: entry.passed ? '#172a1e' : '#ba1a1a' }}>
+                            <p className="text-[13px] font-medium truncate pr-4 theme-text-primary">{entry.title}</p>
+                            <span className="text-[13px] font-bold shrink-0"
+                              style={{ color: entry.passed ? 'var(--icon-success-fg)' : 'var(--icon-error-fg)' }}>
                               {entry.score}%
                             </span>
                           </div>
-                          <div className="h-2.5 rounded-full overflow-hidden" style={{ background: '#f4f4f0' }}>
+                          <div className="h-2.5 rounded-full overflow-hidden theme-progress-track">
                             <div className="h-full rounded-full transition-all duration-500"
                               style={{
                                 width: `${entry.score}%`,
-                                background: entry.passed ? '#172a1e' : '#ba1a1a',
+                                background: entry.passed ? 'var(--ring-progress)' : 'var(--badge-failed-bg)',
                               }} />
                           </div>
-                          <p className="text-[11px] mt-1" style={{ color: '#737873' }}>{entry.date}</p>
+                          <p className="text-[11px] mt-1 theme-muted">{entry.date}</p>
                         </div>
                       ))}
                     </div>
                   )}
                 </section>
-                <section className="bg-white rounded-xl p-8 border border-[#e1e4e0]/40"
-                  style={{ boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}>
-                  <h3 className="text-[20px] font-bold mb-1" style={{ fontFamily: 'Manrope, sans-serif', color: '#172a1e' }}>
+                <section className="theme-card rounded-xl p-8 border" style={{ borderColor: 'var(--border-subtle)', boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}>
+                  <h3 className="text-[20px] font-bold mb-1 theme-text-primary" style={{ fontFamily: 'Manrope, sans-serif' }}>
                     Performance by Category
                   </h3>
-                  <p className="text-[13px] mb-6" style={{ color: '#737873' }}>
+                  <p className="text-[13px] mb-6 theme-muted">
                     Average scores grouped by training category
                   </p>
                   {categoryStats.length === 0 ? (
-                    <div className="text-center py-12" style={{ color: '#737873' }}>
+                    <div className="text-center py-12 theme-muted">
                       <span className="material-symbols-outlined text-[40px] block mb-2">category</span>
                       <p className="text-[14px]">No category data yet</p>
                     </div>
                   ) : (
                     <div className="space-y-3">
                       {categoryStats.map(cat => (
-                        <div key={cat.category} className="flex items-center gap-4 p-4 rounded-xl"
-                          style={{ background: '#f4f4f0' }}>
+                        <div key={cat.category} className="theme-analytics-panel flex items-center gap-4">
                           <div className="flex-1 min-w-0">
-                            <p className="text-[14px] font-bold truncate" style={{ color: '#172a1e' }}>{cat.category}</p>
-                            <p className="text-[12px]" style={{ color: '#737873' }}>{cat.count} quiz{cat.count !== 1 ? 'zes' : ''} taken</p>
+                            <p className="text-[14px] panel-title truncate">{cat.category}</p>
+                            <p className="text-[12px] panel-subtitle">{cat.count} quiz{cat.count !== 1 ? 'zes' : ''} taken</p>
                           </div>
                           <div className="text-right shrink-0">
-                            <p className="text-[22px] font-bold" style={{ fontFamily: 'Manrope, sans-serif', color: '#172a1e' }}>
-                              {cat.avgScore}%
-                            </p>
-                            <p className="text-[10px] font-bold uppercase tracking-wider" style={{ color: '#737873' }}>Avg</p>
+                            <p className="text-[22px] panel-value">{cat.avgScore}%</p>
+                            <p className="text-[10px] font-bold uppercase tracking-wider panel-subtitle">Avg</p>
                           </div>
                         </div>
                       ))}
@@ -278,8 +273,8 @@ export default function EmployeeAnalyticsPage() {
         <footer className="theme-footer py-10 px-8 mt-8 border-t">
           <div className="max-w-[1200px] mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
             <div>
-              <span className="text-[20px] font-bold" style={{ fontFamily: 'Manrope, sans-serif', color: '#172a1e' }}>CleanIQ</span>
-              <p className="text-[13px] mt-1" style={{ color: '#737873' }}>© 2025 CleanIQ. Purifying spaces, professionally.</p>
+              <span className="text-[20px] font-bold theme-text-primary" style={{ fontFamily: 'Manrope, sans-serif' }}>CleanIQ</span>
+              <p className="text-[13px] mt-1 theme-muted">© 2025 CleanIQ. Purifying spaces, professionally.</p>
             </div>
           </div>
         </footer>

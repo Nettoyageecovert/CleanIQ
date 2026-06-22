@@ -124,7 +124,7 @@ export default function QuizReviewPage() {
               onMouseLeave={e => e.currentTarget.style.background = 'transparent'}>
               <span className="material-symbols-outlined">arrow_back</span>
             </button>
-            <h1 className="text-[24px] font-bold" style={{ fontFamily: 'Manrope, sans-serif', color: '#172a1e' }}>
+            <h1 className="text-[24px] font-bold theme-text-primary" style={{ fontFamily: 'Manrope, sans-serif' }}>
               Quiz Review
             </h1>
           </div>
@@ -203,12 +203,12 @@ export default function QuizReviewPage() {
           </div>
 
           {!hasAnswerDetails && (
-            <div className="p-4 rounded-xl text-[14px]" style={{ background: '#fbddc7', color: '#574333' }}>
+            <div className="theme-tip p-4 rounded-xl text-[14px]">
               Detailed answer breakdown is not available for this attempt. Retake the quiz to record your answers.
             </div>
           )}
           <div className="space-y-4">
-            <h3 className="text-[22px] font-bold" style={{ fontFamily: 'Manrope, sans-serif', color: '#172a1e' }}>
+            <h3 className="text-[22px] font-bold theme-text-primary" style={{ fontFamily: 'Manrope, sans-serif' }}>
               Question Breakdown
             </h3>
 
@@ -218,29 +218,25 @@ export default function QuizReviewPage() {
               const skipped = !answered;
 
               return (
-                <div key={question.id} className="bg-white rounded-2xl overflow-hidden border"
-                  style={{
-                    borderColor: skipped ? '#e1e4e0' : isCorrect ? '#d2e8d6' : '#ffdad6',
-                    boxShadow: '0 2px 8px rgba(0,0,0,0.04)',
-                  }}>
+                <div key={question.id}
+                  className={`theme-review-card rounded-2xl overflow-hidden ${
+                    skipped ? '' : isCorrect ? 'theme-review-card--correct' : 'theme-review-card--wrong'
+                  }`}>
 
-                  <div className="flex items-start gap-4 p-6 border-b"
-                    style={{
-                      borderColor: skipped ? '#e1e4e0' : isCorrect ? '#d2e8d6' : '#ffdad6',
-                      background: skipped ? '#f9f9f9' : isCorrect ? 'rgba(210,232,214,0.1)' : 'rgba(255,218,214,0.1)',
-                    }}>
-                    <div className="w-8 h-8 rounded-full flex items-center justify-center shrink-0 font-bold text-[14px]"
-                      style={{
-                        background: skipped ? '#e3e2df' : isCorrect ? '#d2e8d6' : '#ffdad6',
-                        color: skipped ? '#434843' : isCorrect ? '#172a1e' : '#93000a',
-                      }}>
+                  <div className={`flex items-start gap-4 p-6 theme-review-card__header ${
+                    skipped ? '' : isCorrect ? 'theme-review-card__header--correct' : 'theme-review-card__header--wrong'
+                  }`}>
+                    <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 font-bold text-[14px] theme-icon-circle ${
+                      skipped ? '' : isCorrect ? 'theme-icon-circle--success' : 'theme-icon-circle--error'
+                    }`}
+                      style={skipped ? { background: 'var(--bg-panel)', color: 'var(--text-muted)' } : undefined}>
                       {index + 1}
                     </div>
-                    <p className="text-[16px] font-semibold leading-snug flex-1" style={{ color: '#1b1c1a' }}>
+                    <p className="text-[16px] font-semibold leading-snug flex-1 theme-text-primary">
                       {question.text}
                     </p>
                     <span className="material-symbols-outlined text-[22px] shrink-0"
-                      style={{ color: skipped ? '#737873' : isCorrect ? '#172a1e' : '#ba1a1a' }}>
+                      style={{ color: skipped ? 'var(--text-muted)' : isCorrect ? 'var(--icon-success-fg)' : 'var(--icon-error-fg)' }}>
                       {skipped ? 'help_outline' : isCorrect ? 'check_circle' : 'cancel'}
                     </span>
                   </div>
@@ -253,32 +249,24 @@ export default function QuizReviewPage() {
 
                       if (!isCorrectOption && !isUserWrongAnswer) {
                         return (
-                          <div key={optIndex} className="flex items-center gap-3 px-4 py-3 rounded-xl"
-                            style={{ background: '#f9f9f9' }}>
-                            <div className="w-5 h-5 rounded-full border-2 shrink-0" style={{ borderColor: '#d1d5db' }} />
-                            <span className="text-[14px]" style={{ color: '#737873' }}>{option}</span>
+                          <div key={optIndex} className="theme-review-option">
+                            <div className="w-5 h-5 rounded-full border-2 shrink-0" style={{ borderColor: 'var(--border)' }} />
+                            <span>{option}</span>
                           </div>
                         );
                       }
 
                       return (
-                        <div key={optIndex} className="flex items-center gap-3 px-4 py-3 rounded-xl"
-                          style={{
-                            background: isCorrectOption ? '#d2e8d6' : '#ffdad6',
-                            border: `1px solid ${isCorrectOption ? '#b6ccba' : '#ffb4ab'}`,
-                          }}>
+                        <div key={optIndex}
+                          className={`theme-review-option ${isCorrectOption ? 'theme-review-option--correct' : 'theme-review-option--wrong'}`}>
                           <div className="w-5 h-5 rounded-full flex items-center justify-center shrink-0"
-                            style={{ background: isCorrectOption ? '#172a1e' : '#ba1a1a' }}>
+                            style={{ background: isCorrectOption ? 'var(--badge-passed-bg)' : 'var(--badge-failed-bg)' }}>
                             <span className="material-symbols-outlined text-[12px] text-white">
                               {isCorrectOption ? 'check' : 'close'}
                             </span>
                           </div>
-                          <span className="text-[14px] font-semibold flex-1"
-                            style={{ color: isCorrectOption ? '#172a1e' : '#93000a' }}>
-                            {option}
-                          </span>
-                          <span className="text-[11px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full"
-                            style={{ background: isCorrectOption ? '#172a1e' : '#ba1a1a', color: '#ffffff' }}>
+                          <span className="flex-1">{option}</span>
+                          <span className={`theme-review-option__tag ${isCorrectOption ? 'theme-review-option__tag--correct' : 'theme-review-option__tag--wrong'}`}>
                             {isCorrectOption ? (isUserAnswer ? 'Correct · Your Answer' : 'Correct Answer') : 'Your Answer'}
                           </span>
                         </div>
@@ -286,7 +274,7 @@ export default function QuizReviewPage() {
                     })}
 
                     {skipped && (
-                      <p className="text-[13px] italic pt-2" style={{ color: '#737873' }}>
+                      <p className="text-[13px] italic pt-2 theme-muted">
                         You did not answer this question.
                       </p>
                     )}
@@ -297,18 +285,12 @@ export default function QuizReviewPage() {
           </div>
           <div className="flex flex-col sm:flex-row gap-4 pt-4">
             <button onClick={() => navigate('/employee/quiz')}
-              className="flex-1 py-3 rounded-xl text-[15px] font-bold border transition-all flex items-center justify-center gap-2"
-              style={{ borderColor: '#172a1e', color: '#172a1e', background: 'transparent' }}
-              onMouseEnter={e => e.currentTarget.style.background = '#f4f4f0'}
-              onMouseLeave={e => e.currentTarget.style.background = 'transparent'}>
+              className="theme-btn-outline flex-1 py-3 rounded-xl text-[15px] font-bold transition-all flex items-center justify-center gap-2">
               <span className="material-symbols-outlined text-[18px]">arrow_back</span>
               Back to Quiz Center
             </button>
             <button onClick={() => navigate(`/employee/quiz/play/${quiz.id}`)}
-              className="flex-1 py-3 rounded-xl text-[15px] font-bold transition-all flex items-center justify-center gap-2"
-              style={{ background: '#172a1e', color: '#ffffff' }}
-              onMouseEnter={e => e.currentTarget.style.background = '#2d4033'}
-              onMouseLeave={e => e.currentTarget.style.background = '#172a1e'}>
+              className="theme-btn-primary flex-1 py-3 rounded-xl text-[15px] font-bold transition-all flex items-center justify-center gap-2">
               <span className="material-symbols-outlined text-[18px]">replay</span>
               Retake Quiz
             </button>
@@ -318,8 +300,8 @@ export default function QuizReviewPage() {
         <footer className="theme-footer py-10 px-8 mt-8 border-t">
           <div className="max-w-[860px] mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
             <div>
-              <span className="text-[20px] font-bold" style={{ fontFamily: 'Manrope, sans-serif', color: '#172a1e' }}>CleanIQ</span>
-              <p className="text-[13px] mt-1" style={{ color: '#737873' }}>© 2025 CleanIQ. Purifying spaces, professionally.</p>
+              <span className="text-[20px] font-bold theme-text-primary" style={{ fontFamily: 'Manrope, sans-serif' }}>CleanIQ</span>
+              <p className="text-[13px] mt-1 theme-muted">© 2025 CleanIQ. Purifying spaces, professionally.</p>
             </div>
           </div>
         </footer>

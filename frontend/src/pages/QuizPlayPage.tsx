@@ -161,15 +161,14 @@ export default function QuizPlayPage() {
   const formatTime = (s: number) =>
     `${String(Math.floor(s / 60)).padStart(2, '0')}:${String(s % 60).padStart(2, '0')}`;
 
-  const getOptionStyle = (index: number) => {
-    if (!currentQuestion) return { border: '2px solid #e1e4e0', background: '#ffffff' };
-    if (!answered) return {
-      border: selectedOption === index ? '2px solid #172a1e' : '2px solid #e1e4e0',
-      background: selectedOption === index ? '#f4f4f0' : '#ffffff',
-    };
-    if (index === currentQuestion.correctIndex) return { border: '2px solid #172a1e', background: '#d2e8d6' };
-    if (index === selectedOption) return { border: '2px solid #ba1a1a', background: '#ffdad6' };
-    return { border: '2px solid #e1e4e0', background: '#ffffff' };
+  const getOptionClass = (index: number) => {
+    if (!currentQuestion) return 'theme-quiz-option';
+    if (!answered) {
+      return selectedOption === index ? 'theme-quiz-option theme-quiz-option--selected' : 'theme-quiz-option';
+    }
+    if (index === currentQuestion.correctIndex) return 'theme-quiz-option theme-quiz-option--correct';
+    if (index === selectedOption) return 'theme-quiz-option theme-quiz-option--wrong';
+    return 'theme-quiz-option';
   };
 
   const getCheckStyle = (index: number) => {
@@ -296,43 +295,38 @@ export default function QuizPlayPage() {
         <div className="w-full max-w-2xl mb-8">
           <div className="flex justify-between items-end mb-3">
             <div>
-              <h2 className="text-[28px] font-bold"
-                style={{ fontFamily: 'Manrope, sans-serif', color: '#1b1c1a' }}>
+              <h2 className="text-[28px] font-bold theme-text-primary"
+                style={{ fontFamily: 'Manrope, sans-serif' }}>
                 {quiz.title}
               </h2>
-              <p className="text-[14px]" style={{ color: '#737873' }}>
+              <p className="text-[14px] theme-muted">
                 Question {currentIndex + 1} of {questions.length}
               </p>
             </div>
-            <div className="flex items-center gap-2 px-4 py-2 rounded-full"
-              style={{
-                background: timeLeft <= 10 ? '#ffdad6' : '#dae8be',
-                color: timeLeft <= 10 ? '#93000a' : '#1f2a0e',
-              }}>
+            <div className={`flex items-center gap-2 px-4 py-2 rounded-full theme-quiz-timer ${timeLeft <= 10 ? 'theme-quiz-timer--urgent' : ''}`}>
               <span className="material-symbols-outlined text-[18px]">timer</span>
               <span className="text-[14px] font-bold">{formatTime(timeLeft)}</span>
             </div>
           </div>
-          <div className="w-full h-3 rounded-full overflow-hidden" style={{ background: '#e1e4e0' }}>
+          <div className="w-full h-3 rounded-full overflow-hidden theme-progress-track">
             <div className="h-full rounded-full transition-all duration-500"
-              style={{ width: `${progress}%`, background: '#172a1e' }} />
+              style={{ width: `${progress}%`, background: 'var(--ring-progress)' }} />
           </div>
         </div>
-        <section className="w-full max-w-2xl rounded-2xl p-8 relative overflow-hidden"
-          style={{ background: '#ffffff', boxShadow: '0 10px 40px rgba(23,42,30,0.08)' }}>
+        <section className="w-full max-w-2xl rounded-2xl p-8 relative overflow-hidden theme-quiz-play-card">
           <div className="absolute -top-8 -right-8 w-28 h-28 rounded-full opacity-20 pointer-events-none"
-            style={{ background: '#d2e8d6' }} />
+            style={{ background: 'var(--accent-green)' }} />
 
-          <h3 className="text-[22px] font-bold mb-6 relative z-10"
-            style={{ fontFamily: 'Manrope, sans-serif', color: '#1b1c1a', lineHeight: '1.4' }}>
+          <h3 className="text-[22px] font-bold mb-6 relative z-10 theme-text-primary"
+            style={{ fontFamily: 'Manrope, sans-serif', lineHeight: '1.4' }}>
             {currentQuestion.text}
           </h3>
 
           <div className="space-y-3 relative z-10">
             {currentQuestion.options.map((option, index) => (
               <button key={index} onClick={() => handleSelect(index)}
-                className="w-full flex items-center gap-4 p-4 rounded-xl transition-all duration-200 text-left"
-                style={{ ...getOptionStyle(index), cursor: answered ? 'default' : 'pointer' }}>
+                className={getOptionClass(index)}
+                style={{ cursor: answered ? 'default' : 'pointer' }}>
                 <div className="w-6 h-6 rounded-full flex items-center justify-center shrink-0 transition-all"
                   style={getCheckStyle(index)}>
                   {answered && (index === currentQuestion.correctIndex || index === selectedOption) && (
@@ -344,50 +338,33 @@ export default function QuizPlayPage() {
                     <span className="material-symbols-outlined text-[14px] text-white">check</span>
                   )}
                 </div>
-                <span className="text-[16px]"
-                  style={{
-                    color: answered && index === currentQuestion.correctIndex ? '#172a1e'
-                      : answered && index === selectedOption ? '#93000a'
-                      : '#1b1c1a',
-                    fontWeight: answered && index === currentQuestion.correctIndex ? '700' : '500',
-                  }}>
-                  {option}
-                </span>
+                <span>{option}</span>
               </button>
             ))}
           </div>
 
-          <div className="mt-6 flex justify-between items-center border-t border-[#f4f4f0] pt-6">
+          <div className="mt-6 flex justify-between items-center border-t pt-6" style={{ borderColor: 'var(--border-subtle)' }}>
             <button onClick={handleNext}
-              className="text-[14px] font-medium flex items-center gap-1 transition-colors"
-              style={{ color: '#737873' }}
-              onMouseEnter={e => e.currentTarget.style.color = '#172a1e'}
-              onMouseLeave={e => e.currentTarget.style.color = '#737873'}>
+              className="theme-link text-[14px] font-medium flex items-center gap-1">
               <span className="material-symbols-outlined text-[18px]">undo</span>
               Skip for now
             </button>
             <button onClick={handleNext} disabled={!answered}
-              className="flex items-center gap-2 px-8 py-3 rounded-full text-[14px] font-bold transition-all disabled:opacity-40 disabled:cursor-not-allowed"
-              style={{ background: '#172a1e', color: '#ffffff' }}
-              onMouseEnter={e => { if (answered) e.currentTarget.style.background = '#2d4033'; }}
-              onMouseLeave={e => { e.currentTarget.style.background = '#172a1e'; }}>
+              className="theme-btn-primary flex items-center gap-2 px-8 py-3 rounded-full text-[14px] font-bold transition-all disabled:opacity-40 disabled:cursor-not-allowed">
               {currentIndex < questions.length - 1 ? 'Next Question' : 'Finish Quiz'}
               <span className="material-symbols-outlined text-[18px]">arrow_forward</span>
             </button>
           </div>
         </section>
-        <footer className="w-full max-w-2xl mt-12 pt-6 border-t border-[#e1e4e0]/40">
+        <footer className="theme-footer w-full max-w-2xl mt-12 pt-6 border-t">
           <div className="flex flex-col md:flex-row justify-between items-center gap-3">
-            <p className="text-[12px]" style={{ color: '#737873' }}>
+            <p className="text-[12px] theme-muted">
               © 2025 CleanIQ. Purifying spaces, professionally.
             </p>
             <div className="flex gap-6">
               {['Support', 'Privacy Policy', 'Terms of Service'].map(link => (
                 <a key={link} href="#"
-                  className="text-[12px] font-medium transition-colors"
-                  style={{ color: '#737873' }}
-                  onMouseEnter={e => e.currentTarget.style.color = '#172a1e'}
-                  onMouseLeave={e => e.currentTarget.style.color = '#737873'}>
+                  className="theme-link text-[12px] font-medium">
                   {link}
                 </a>
               ))}

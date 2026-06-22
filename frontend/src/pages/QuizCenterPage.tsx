@@ -168,37 +168,25 @@ export default function QuizCenterPage() {
               </div>
             </div>
           </div>
-          <div className="flex border-b border-[#e1e4e0]/40">
+          <div className="flex border-b theme-tab-bar">
             {(['past', 'upcoming'] as const).map(tab => (
               <button key={tab} onClick={() => setActiveTab(tab)}
-                className="px-8 py-4 text-[14px] font-bold transition-all"
-                style={{
-                  color: activeTab === tab ? '#172a1e' : '#737873',
-                  borderBottom: activeTab === tab ? '2px solid #172a1e' : '2px solid transparent',
-                  marginBottom: '-1px',
-                }}>
+                className={`px-8 py-4 text-[14px] font-bold transition-all theme-tab-bar__tab ${activeTab === tab ? 'theme-tab-bar__tab--active' : ''}`}>
                 {tab === 'past' ? 'Past Assessments' : 'Upcoming'}
               </button>
             ))}
           </div>
           <div className="flex gap-3">
             <div className="relative flex-1">
-              <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-[20px]"
-                style={{ color: '#737873' }}>search</span>
+              <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-[20px] theme-muted">search</span>
               <input
-                className="w-full pl-12 pr-4 py-3 rounded-xl text-[15px] border outline-none transition-all"
-                style={{ background: '#ffffff', borderColor: '#e1e4e0', color: '#1b1c1a' }}
+                className="theme-input w-full pl-12 pr-4 py-3 rounded-xl text-[15px] border outline-none transition-all"
                 placeholder="Search quizzes by title or category..."
                 value={searchQuery}
                 onChange={e => setSearchQuery(e.target.value)}
-                onFocus={e => { e.target.style.borderColor = '#4f6355'; e.target.style.boxShadow = '0 0 0 3px rgba(79,99,85,0.1)'; }}
-                onBlur={e => { e.target.style.borderColor = '#e1e4e0'; e.target.style.boxShadow = 'none'; }}
               />
             </div>
-            <button className="px-5 flex items-center gap-2 rounded-xl border text-[14px] font-medium transition-colors"
-              style={{ background: '#ffffff', borderColor: '#e1e4e0', color: '#434843' }}
-              onMouseEnter={e => e.currentTarget.style.background = '#f4f4f0'}
-              onMouseLeave={e => e.currentTarget.style.background = '#ffffff'}>
+            <button className="theme-input px-5 flex items-center gap-2 rounded-xl border text-[14px] font-medium transition-colors">
               <span className="material-symbols-outlined text-[20px]">filter_list</span>
               Filter
             </button>
@@ -223,21 +211,19 @@ export default function QuizCenterPage() {
               </div>
             ) : displayedQuizzes.map(quiz => (
               <div key={quiz.id}
-                className="flex flex-col md:flex-row items-center gap-6 p-6 rounded-xl border transition-all duration-300 cursor-pointer"
-                style={{ background: '#ffffff', borderColor: 'transparent', boxShadow: '0 1px 4px rgba(0,0,0,0.04)' }}
-                onMouseEnter={e => { e.currentTarget.style.borderColor = '#b6ccba'; e.currentTarget.style.boxShadow = '0 8px 24px rgba(23,42,30,0.08)'; }}
+                className="theme-quiz-list-row flex flex-col md:flex-row items-center gap-6 p-6 rounded-xl transition-all duration-300 cursor-pointer"
+                onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--ring-progress)'; e.currentTarget.style.boxShadow = '0 8px 24px rgba(23,42,30,0.08)'; }}
                 onMouseLeave={e => { e.currentTarget.style.borderColor = 'transparent'; e.currentTarget.style.boxShadow = '0 1px 4px rgba(0,0,0,0.04)'; }}>
 
-                <div className="w-16 h-16 rounded-xl flex items-center justify-center shrink-0"
-                  style={{ background: quiz.iconBg }}>
-                  <span className="material-symbols-outlined text-[32px]" style={{ color: quiz.iconColor }}>
+                <div className="w-16 h-16 theme-quiz-list-icon">
+                  <span className="material-symbols-outlined text-[32px]">
                     {quiz.icon}
                   </span>
                 </div>
 
                 <div className="flex-1 text-center md:text-left">
-                  <h4 className="text-[18px] font-bold mb-1" style={{ color: '#172a1e' }}>{quiz.title}</h4>
-                  <p className="text-[13px]" style={{ color: '#737873' }}>
+                  <h4 className="text-[18px] font-bold mb-1 theme-text-primary">{quiz.title}</h4>
+                  <p className="text-[13px] theme-muted">
                     {quiz.category} • {activeTab === 'past' ? `Completed ${quiz.dateLabel}` : `Assigned ${quiz.dateLabel}`}
                   </p>
                 </div>
@@ -246,26 +232,20 @@ export default function QuizCenterPage() {
                   {activeTab === 'past' ? (
                     <>
                       <div className="text-right">
-                        <p className="text-[11px] font-bold uppercase tracking-wider" style={{ color: '#737873' }}>Score</p>
-                        <p className="text-[24px] font-bold" style={{ fontFamily: 'Manrope, sans-serif', color: '#172a1e' }}>
+                        <p className="text-[11px] font-bold uppercase tracking-wider theme-muted">Score</p>
+                        <p className="text-[24px] font-bold theme-text-primary" style={{ fontFamily: 'Manrope, sans-serif' }}>
                           {quiz.score}%
                         </p>
                       </div>
-                      <div className="hidden md:block w-px h-10" style={{ background: '#e1e4e0' }} />
-                      <button className="px-6 py-2 rounded-lg text-[14px] font-bold transition-all"
-                        style={{ background: '#2d4033', color: '#d2e8d6' }}
-                        onMouseEnter={e => e.currentTarget.style.background = '#172a1e'}
-                        onMouseLeave={e => e.currentTarget.style.background = '#2d4033'}
+                      <div className="hidden md:block w-px h-10" style={{ background: 'var(--border)' }} />
+                      <button className="theme-btn-secondary px-6 py-2 rounded-lg text-[14px] font-bold transition-all"
                         onClick={() => navigate(`/employee/quiz/review/${quiz.id}`)}>
                         Review
                       </button>
                     </>
                   ) : (
                     <button
-                      className="px-6 py-2 rounded-lg text-[14px] font-bold transition-all"
-                      style={{ background: '#172a1e', color: '#ffffff' }}
-                      onMouseEnter={e => e.currentTarget.style.background = '#2d4033'}
-                      onMouseLeave={e => e.currentTarget.style.background = '#172a1e'}
+                      className="theme-btn-primary px-6 py-2 rounded-lg text-[14px] font-bold transition-all"
                       onClick={() => navigate(`/employee/quiz/play/${quiz.quizId}`)}>
                       Start Quiz
                     </button>
@@ -280,14 +260,12 @@ export default function QuizCenterPage() {
         <footer className="theme-footer py-10 px-8 mt-8 border-t">
           <div className="max-w-[1200px] mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
             <div>
-              <span className="text-[20px] font-bold" style={{ fontFamily: 'Manrope, sans-serif', color: '#172a1e' }}>CleanIQ</span>
-              <p className="text-[13px] mt-1" style={{ color: '#737873' }}>© 2025 CleanIQ. Purifying spaces, professionally.</p>
+              <span className="text-[20px] font-bold theme-text-primary" style={{ fontFamily: 'Manrope, sans-serif' }}>CleanIQ</span>
+              <p className="text-[13px] mt-1 theme-muted">© 2025 CleanIQ. Purifying spaces, professionally.</p>
             </div>
             <div className="flex gap-8">
               {['Privacy Policy', 'Terms of Service', 'Support'].map(link => (
-                <a key={link} href="#" className="text-[12px] font-bold transition-colors" style={{ color: '#737873' }}
-                  onMouseEnter={e => e.currentTarget.style.color = '#172a1e'}
-                  onMouseLeave={e => e.currentTarget.style.color = '#737873'}>
+                <a key={link} href="#" className="theme-link text-[12px] font-bold">
                   {link}
                 </a>
               ))}
