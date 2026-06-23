@@ -11,6 +11,7 @@ import QuizReviewPage from './pages/QuizReviewPage';
 import SettingsPage from './pages/SettingsPage';
 import CourseManagementPage from './pages/CourseManagementPage';
 import QuizCreatorPage from './pages/QuizCreatorPage';
+import EmployerDashboardPage from './pages/EmployerDashboardPage';
 
 
 
@@ -32,6 +33,7 @@ function App() {
           <Route path="/employer/quiz-creator" element={<QuizCreatorPage />} />
           <Route path="/employer/courses" element={<CourseManagementPage />} />
           <Route path="*" element={<Navigate to="/register" replace />} />
+          <Route path="/employer/dashboard" element={<EmployerDashboardPage />} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>
