@@ -12,10 +12,7 @@ export default function RegisterPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
-  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
-
-  // Entrance animation
-  useEffect(() => {
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});  useEffect(() => {
     const card = cardRef.current;
     if (!card) return;
     card.style.opacity = '0';
@@ -63,27 +60,18 @@ export default function RegisterPage() {
     <main className="h-screen flex items-start justify-center pt-4 px-4 relative overflow-hidden"
       style={{ background: 'linear-gradient(135deg, #f4f4f0 0%, #e9e8e4 100%)' }}>
       <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
-      <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
-
-      {/* Background decorations */}
-      <div className="absolute bottom-10 right-10 opacity-10 rotate-12 select-none pointer-events-none">
+      <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />      <div className="absolute bottom-10 right-10 opacity-10 rotate-12 select-none pointer-events-none">
         <span className="material-symbols-outlined text-[180px]" style={{ color: '#172a1e' }}>psychology_alt</span>
       </div>
 
       <div className="w-full max-w-[480px] z-10">
         <div ref={cardRef} className="rounded-xl p-6 flex flex-col items-center"
-          style={{ background: 'rgba(255,255,255,0.85)', backdropFilter: 'blur(12px)', border: '1px solid rgba(255,255,255,0.5)', boxShadow: '0 8px 32px rgba(45,64,51,0.06)' }}>
-
-          {/* Logo */}
-          <div className="mb-2 transition-transform duration-500 hover:scale-105">
+          style={{ background: 'rgba(255,255,255,0.85)', backdropFilter: 'blur(12px)', border: '1px solid rgba(255,255,255,0.5)', boxShadow: '0 8px 32px rgba(45,64,51,0.06)' }}>          <div className="mb-2 transition-transform duration-500 hover:scale-105">
             <div className="w-14 h-14 rounded-full flex items-center justify-center"
               style={{ background: '#172a1e' }}>
               <span className="material-symbols-outlined text-[28px]" style={{ color: '#ffffff' }}>cleaning_services</span>
             </div>
-          </div>
-
-          {/* Heading */}
-          <div className="text-center mb-2">
+          </div>          <div className="text-center mb-2">
             <h1 className="text-[32px] leading-10 font-semibold mb-1"
               style={{ fontFamily: 'Manrope, sans-serif', color: '#172a1e' }}>
               Join CleanIQ
@@ -91,22 +79,13 @@ export default function RegisterPage() {
             <p className="text-[16px] leading-6 max-w-[320px]" style={{ color: '#434843' }}>
               Create your account to start your training journey.
             </p>
-          </div>
-
-          {/* Error banner */}
-          {error && (
+          </div>          {error && (
             <div className="w-full mb-2 px-4 py-3 rounded-lg text-sm flex items-center gap-2"
               style={{ background: '#ffdad6', color: '#93000a' }}>
               <span className="material-symbols-outlined text-[18px]">error</span>
               {error}
             </div>
-          )}
-
-          {/* Form */}
-          <form className="w-full space-y-3" onSubmit={handleSubmit}>
-
-            {/* Full Name */}
-            <div className="space-y-1">
+          )}          <form className="w-full space-y-3" onSubmit={handleSubmit}>            <div className="space-y-1">
               <label className="text-[14px] font-medium ml-1 block" htmlFor="fullName" style={{ color: '#434843' }}>Full Name</label>
               <div className="relative">
                 <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-[20px]" style={{ color: '#c3c8c1' }}>person</span>
@@ -120,10 +99,7 @@ export default function RegisterPage() {
                   required />
               </div>
               {fieldErrors.fullName && <p className="text-[12px] px-1" style={{ color: '#ba1a1a' }}>{fieldErrors.fullName}</p>}
-            </div>
-
-            {/* Email */}
-            <div className="space-y-1">
+            </div>            <div className="space-y-1">
               <label className="text-[14px] font-medium ml-1 block" htmlFor="email" style={{ color: '#434843' }}>Email Address</label>
               <div className="relative">
                 <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-[20px]" style={{ color: '#c3c8c1' }}>mail</span>
@@ -137,10 +113,7 @@ export default function RegisterPage() {
                   required />
               </div>
               {fieldErrors.email && <p className="text-[12px] px-1" style={{ color: '#ba1a1a' }}>{fieldErrors.email}</p>}
-            </div>
-
-            {/* Password */}
-            <div className="space-y-1">
+            </div>            <div className="space-y-1">
               <label className="text-[14px] font-medium ml-1 block" htmlFor="password" style={{ color: '#434843' }}>Password</label>
               <div className="relative">
                 <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-[20px]" style={{ color: '#c3c8c1' }}>lock</span>
@@ -161,10 +134,7 @@ export default function RegisterPage() {
               {fieldErrors.password
                 ? <p className="text-[12px] px-1" style={{ color: '#ba1a1a' }}>{fieldErrors.password}</p>
                 : <p className="text-[11px] px-1 mt-1" style={{ color: '#737873' }}>Must be at least 8 characters with letters and numbers.</p>}
-            </div>
-
-            {/* Submit */}
-            <div className="pt-3">
+            </div>            <div className="pt-3">
               <button
                 className="w-full py-4 rounded-lg text-[18px] font-semibold flex items-center justify-center gap-2 transition-all duration-300 active:scale-[0.98] disabled:opacity-60"
                 style={{ fontFamily: 'Manrope, sans-serif', background: '#172a1e', color: '#ffffff' }}
@@ -178,19 +148,13 @@ export default function RegisterPage() {
                 )}
               </button>
             </div>
-          </form>
-
-          {/* Footer link */}
-          <div className="mt-4 pt-4 border-t w-full text-center" style={{ borderColor: '#c3c8c1' }}>
+          </form>          <div className="mt-4 pt-4 border-t w-full text-center" style={{ borderColor: '#c3c8c1' }}>
             <p className="text-[16px]" style={{ color: '#434843' }}>
               Already have an account?{' '}
               <Link to="/login" className="font-bold hover:underline" style={{ color: '#172a1e' }}>Login here</Link>
             </p>
           </div>
-        </div>
-
-        {/* Policy footer */}
-        <footer className="mt-6 text-center">
+        </div>        <footer className="mt-6 text-center">
           <p className="mt-3 text-[12px]" style={{ color: '#c3c8c1' }}>© 2026 CleanIQ. Purifying spaces, professionally.</p>
         </footer>
       </div>
