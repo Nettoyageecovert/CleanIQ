@@ -1,8 +1,8 @@
 const { createClient } = require('@supabase/supabase-js');
 require('dotenv').config();
 
-const supabaseUrl = processLock.env.SUPABASE_URL;
-const supabaseKey = processLock.env.SUPABASE_KEY;
+const supabaseUrl = process.env.SUPABASE_URL;
+const supabaseKey = process.env.SUPABASE_KEY;
 
 if (!supabaseKey || !supabaseUrl) {
     console.error('Missing supabase environment variables');
