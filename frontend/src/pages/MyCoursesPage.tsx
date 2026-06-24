@@ -1,62 +1,55 @@
-import { useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import Sidebar from '../components/Sidebar';
-
-interface Course {
-  id: string;
-  title: string;
-  description: string;
-  progress: number;
-  status: 'completed' | 'in-progress' | 'not-started';
-  required?: boolean;
-  color: string;
-  icon: string;
-}
-
-const mockCourses: Course[] = [
-  {
-    id: '1', title: 'Safety Protocols 101',
-    description: 'Essential guidelines for chemical handling and occupational hazard prevention in residential spaces.',
-    progress: 85, status: 'in-progress', required: true, color: '#d2e8d6', icon: 'health_and_safety',
-  },
-  {
-    id: '2', title: 'Eco-Friendly Disposal',
-    description: 'Advanced techniques for waste management and sustainable product lifecycle in professional cleaning.',
-    progress: 32, status: 'in-progress', color: '#dae8be', icon: 'recycling',
-  },
-  {
-    id: '3', title: 'Textile Care Mastery',
-    description: 'Specialized knowledge on treating delicate fabrics and high-end upholstery using botanical solutions.',
-    progress: 0, status: 'not-started', color: '#efeeea', icon: 'dry_cleaning',
-  },
-  {
-    id: '4', title: 'Botanical Chemistry',
-    description: 'Understanding the molecular power of plant-based surfactants in deep cleaning applications.',
-    progress: 15, status: 'in-progress', color: '#f8dac5', icon: 'science',
-  },
-  {
-    id: '5', title: 'Floor Care Excellence',
-    description: 'Master the art of restoring and maintaining all types of flooring from hardwood to marble.',
-    progress: 100, status: 'completed', color: '#b6ccba', icon: 'floor',
-  },
-];
+import { fetchEmployeeCourses, type EmployeeCourse } from '../api/courses';
+import { getCategoryIcon } from '../constants/trainingCategories';
+import { useTranslation } from '../i18n/useTranslation';
 
 type FilterType = 'all' | 'in-progress' | 'completed';
 type SortType = 'recent' | 'title' | 'progress';
 
 export default function MyCoursesPage() {
   const { user } = useAuth();
+  const navigate = useNavigate();
+  const { t } = useTranslation();
   const [filter, setFilter] = useState<FilterType>('all');
   const [sort, setSort] = useState<SortType>('recent');
   const [searchQuery, setSearchQuery] = useState('');
+  const [courses, setCourses] = useState<EmployeeCourse[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const featuredCourse = mockCourses[0];
-  const overallProgress = Math.round(mockCourses.reduce((sum, c) => sum + c.progress, 0) / mockCourses.length);
+  useEffect(() => {
+    if (!user?.id) return;
 
-  const filteredCourses = mockCourses
+    const load = async () => {
+      setIsLoading(true);
+      try {
+        const data = await fetchEmployeeCourses(user.id);
+        setCourses(data);
+      } catch {
+        setCourses([]);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    load();
+  }, [user?.id]);
+
+  const featuredCourse = useMemo(() => {
+    const inProgress = courses.find(course => course.progressStatus === 'in-progress');
+    return inProgress ?? courses[0] ?? null;
+  }, [courses]);
+
+  const overallProgress = courses.length > 0
+    ? Math.round(courses.reduce((sum, course) => sum + course.progress, 0) / courses.length)
+    : 0;
+
+  const filteredCourses = courses
     .filter(c => {
-      if (filter === 'in-progress') return c.status === 'in-progress';
-      if (filter === 'completed') return c.status === 'completed';
+      if (filter === 'in-progress') return c.progressStatus === 'in-progress';
+      if (filter === 'completed') return c.progressStatus === 'completed';
       return true;
     })
     .filter(c => c.title.toLowerCase().includes(searchQuery.toLowerCase()))
@@ -66,15 +59,15 @@ export default function MyCoursesPage() {
       return 0;
     });
 
-  const getStatusLabel = (course: Course) => {
-    if (course.status === 'completed') return 'Completed';
-    if (course.status === 'not-started') return 'Not Started';
+  const getStatusLabel = (course: EmployeeCourse) => {
+    if (course.progressStatus === 'completed') return 'Completed';
+    if (course.progressStatus === 'not-started') return 'Not Started';
     return `${course.progress}% Complete`;
   };
 
-  const getProgressColor = (course: Course) => {
-    if (course.status === 'completed') return '#172a1e';
-    if (course.status === 'not-started') return '#c3c8c1';
+  const getProgressColor = (course: EmployeeCourse) => {
+    if (course.progressStatus === 'completed') return '#172a1e';
+    if (course.progressStatus === 'not-started') return '#c3c8c1';
     return '#705a49';
   };
 
@@ -122,6 +115,7 @@ export default function MyCoursesPage() {
           </div>
         </header>
         <section className="px-8 pt-6 pb-10">
+          {featuredCourse ? (
           <div className="relative w-full h-[320px] rounded-[24px] overflow-hidden"
             style={{ background: 'linear-gradient(135deg, #172a1e 0%, #2d4033 60%, #344022 100%)' }}>
             <div className="absolute -right-20 -top-20 w-80 h-80 rounded-full opacity-10" style={{ background: '#d2e8d6' }} />
@@ -139,18 +133,20 @@ export default function MyCoursesPage() {
                   {featuredCourse.description}
                 </p>
                 <div className="flex items-center gap-4">
-                  <button className="px-6 py-3 rounded-full font-bold text-[14px] flex items-center gap-2 transition-all"
+                  <button onClick={() => navigate('/employee/quiz')}
+                    className="px-6 py-3 rounded-full font-bold text-[14px] flex items-center gap-2 transition-all"
                     style={{ background: '#d2e8d6', color: '#172a1e' }}
                     onMouseEnter={e => e.currentTarget.style.background = '#ffffff'}
                     onMouseLeave={e => e.currentTarget.style.background = '#d2e8d6'}>
                     <span className="material-symbols-outlined text-[18px]">play_circle</span>
-                    Resume Learning
+                    {t('courses.resumeLearning')}
                   </button>
-                  <button className="px-6 py-3 rounded-full font-bold text-[14px] border transition-all"
+                  <button onClick={() => navigate('/employee/quiz')}
+                    className="px-6 py-3 rounded-full font-bold text-[14px] border transition-all"
                     style={{ background: 'rgba(255,255,255,0.1)', color: '#ffffff', borderColor: 'rgba(255,255,255,0.3)' }}
                     onMouseEnter={e => e.currentTarget.style.background = 'rgba(255,255,255,0.2)'}
                     onMouseLeave={e => e.currentTarget.style.background = 'rgba(255,255,255,0.1)'}>
-                    Join Live Game
+                    {t('courses.joinLiveQuiz')}
                   </button>
                 </div>
               </div>
@@ -166,6 +162,11 @@ export default function MyCoursesPage() {
               </div>
             </div>
           </div>
+          ) : (
+            <div className="theme-card rounded-[24px] p-12 text-center border">
+              <p className="theme-muted">{isLoading ? 'Loading courses...' : t('courses.noCourses')}</p>
+            </div>
+          )}
         </section>
         <section className="px-8 pb-12 max-w-[1200px] mx-auto w-full">
           <div className="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
@@ -188,15 +189,20 @@ export default function MyCoursesPage() {
             </div>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredCourses.map(course => (
+            {isLoading ? (
+              <p className="col-span-full text-center py-12 theme-muted">Loading courses...</p>
+            ) : filteredCourses.length === 0 ? (
+              <p className="col-span-full text-center py-12 theme-muted">{t('courses.noCourses')}</p>
+            ) : filteredCourses.map(course => (
               <div key={course.id}
-                className="bg-white rounded-[20px] overflow-hidden border border-[#e1e4e0]/60 flex flex-col cursor-pointer transition-all duration-300"
-                style={{ boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}
+                className="theme-card rounded-[20px] overflow-hidden border flex flex-col cursor-pointer transition-all duration-300"
+                onClick={() => navigate('/employee/quiz')}
                 onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-4px)'; e.currentTarget.style.boxShadow = '0 12px 24px rgba(45,64,51,0.1)'; }}
                 onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 2px 8px rgba(0,0,0,0.04)'; }}>
-                <div className="h-44 relative flex items-center justify-center theme-course-hero" style={{ background: course.color }}>
+                <div className="h-44 relative flex items-center justify-center theme-course-hero"
+                  style={{ background: course.color || getCategoryIcon(course.category).color }}>
                   <span className="material-symbols-outlined text-[72px]">
-                    {course.icon}
+                    {course.icon || getCategoryIcon(course.category).icon}
                   </span>
                   {course.required && (
                     <div className="absolute top-4 left-4 px-3 py-1 rounded-full text-[12px] font-bold"
@@ -204,7 +210,7 @@ export default function MyCoursesPage() {
                       Required
                     </div>
                   )}
-                  {course.status === 'completed' && (
+                  {course.progressStatus === 'completed' && (
                     <div className="absolute top-4 right-4 w-8 h-8 rounded-full flex items-center justify-center"
                       style={{ background: '#172a1e' }}>
                       <span className="material-symbols-outlined text-[18px]" style={{ color: '#d2e8d6' }}>check</span>
@@ -230,7 +236,6 @@ export default function MyCoursesPage() {
                 </div>
               </div>
             ))}
-            
           </div>
         </section>
         <footer className="theme-footer py-10 px-8 mt-auto border-t">

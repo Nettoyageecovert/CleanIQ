@@ -108,7 +108,7 @@ export default function EmployeeAnalyticsPage() {
         <header className="theme-header-bar h-20 flex items-center justify-between px-8 sticky top-0 z-40 border-b">
           <h1 className="text-[24px] font-bold theme-text-primary" style={{ fontFamily: 'Manrope, sans-serif' }}>
             Analytics
-          </h1>
+          </h1> 
           <div className="flex items-center gap-3 pl-4">
             <div className="text-right hidden sm:block">
               <p className="text-[14px] font-bold theme-text-primary">{user?.fullName}</p>

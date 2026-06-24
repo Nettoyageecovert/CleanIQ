@@ -45,3 +45,8 @@ create index if not exists quiz_attempts_quiz_id_idx on public.quiz_attempts (qu
 create index if not exists quiz_attempts_completed_at_idx on public.quiz_attempts (completed_at desc);
 
 alter table public.quiz_attempts enable row level security;
+
+-- courses table already exists in Supabase with:
+-- id uuid, title, description, duration, color, icon, required,
+-- created_at, category, difficulty, certifiable, thumbnail_url
+-- Draft courses use duration = 'draft'. Published courses use a real duration label.

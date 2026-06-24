@@ -16,7 +16,14 @@ app.use('/api/auth', authRoutes);
 app.use('/api/courses', courseRoutes);
 app.use('/api/quizzes', quizRoutes);
 
-// Health Check
+app.get('/', (req, res) => {
+  res.json({
+    status: 'ok',
+    message: 'CleanIQ backend is running',
+    frontend: 'http://localhost:5173',
+  });
+});
+
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', message: 'CleanIQ API is running' });
 });

@@ -5,6 +5,7 @@ import { useAuth } from '../context/AuthContext';
 import { usePreferences } from '../context/PreferencesContext';
 import { changePassword, updateProfile } from '../api/auth';
 import { LANGUAGE_OPTIONS, type Language } from '../utils/userPrefs';
+import { useTranslation } from '../i18n/useTranslation';
 
 function getErrorMessage(error: unknown, fallback: string) {
   if (axios.isAxiosError(error) && error.response?.data?.message) {
@@ -20,6 +21,7 @@ interface AccountSettingsViewProps {
 export default function AccountSettingsView({ variant }: AccountSettingsViewProps) {
   const { user, updateUser, logout } = useAuth();
   const { prefs, setDarkMode, setEmailNotifications, setLanguage } = usePreferences();
+  const { t } = useTranslation();
   const navigate = useNavigate();
 
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
@@ -112,12 +114,11 @@ export default function AccountSettingsView({ variant }: AccountSettingsViewProp
   const handleLanguageSelect = (language: Language) => {
     setLanguage(language);
     setShowLanguagePicker(false);
-    const label = LANGUAGE_OPTIONS.find(o => o.value === language)?.label ?? 'English';
-    showToast(`Language set to ${label}.`);
+    const label = language === 'fr' ? t('language.fr') : t('language.en');
+    showToast(`${t('settings.languageUpdated')} ${label}.`);
   };
 
-  const selectedLanguageLabel =
-    LANGUAGE_OPTIONS.find(o => o.value === prefs.language)?.label ?? 'English (Default)';
+  const selectedLanguageLabel = prefs.language === 'fr' ? t('language.fr') : t('language.en');
 
   const accountActions = [
     { icon: 'person', label: 'Edit Profile Info', sublabel: 'Update your display name', action: () => { setProfileError(''); setShowEditProfile(true); } },
@@ -134,7 +135,7 @@ export default function AccountSettingsView({ variant }: AccountSettingsViewProp
     <>
       <header className="theme-header-bar theme-header h-20 flex items-center justify-between px-8 sticky top-0 z-40 border-b">
         <h1 className="text-[24px] font-bold theme-text-primary" style={{ fontFamily: 'Manrope, sans-serif' }}>
-          Settings
+          {t('settings.title')}
         </h1>
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-3 pl-4 border-l" style={{ borderColor: 'var(--border)' }}>
@@ -248,7 +249,7 @@ export default function AccountSettingsView({ variant }: AccountSettingsViewProp
             style={{ boxShadow: '0 2px 8px rgba(0,0,0,0.04)', borderColor: 'var(--border-subtle)' }}>
             <div className="flex items-center gap-3 mb-6">
               <span className="material-symbols-outlined text-[22px]" style={{ color: '#705a49' }}>palette</span>
-              <h4 className="text-[20px] font-bold theme-text-primary" style={{ fontFamily: 'Manrope, sans-serif' }}>Preferences</h4>
+              <h4 className="text-[20px] font-bold theme-text-primary" style={{ fontFamily: 'Manrope, sans-serif' }}>{t('settings.preferences')}</h4>
             </div>
             <div className="space-y-3">
               <div className="theme-panel flex items-center justify-between p-4 rounded-xl">
@@ -257,7 +258,7 @@ export default function AccountSettingsView({ variant }: AccountSettingsViewProp
                     {prefs.darkMode ? 'dark_mode' : 'light_mode'}
                   </span>
                   <div>
-                    <p className="text-[14px] font-medium theme-text-primary">Dark Mode</p>
+                    <p className="text-[14px] font-medium theme-text-primary">{t('settings.darkMode')}</p>
                     <p className="text-[12px] theme-muted">
                       {prefs.darkMode ? 'Dark theme enabled' : 'Light theme enabled'}
                     </p>
@@ -300,7 +301,7 @@ export default function AccountSettingsView({ variant }: AccountSettingsViewProp
                 <div className="flex items-center gap-4">
                   <span className="material-symbols-outlined text-[20px] theme-text-secondary">language</span>
                   <div>
-                    <p className="text-[14px] font-medium theme-text-primary">Language</p>
+                    <p className="text-[14px] font-medium theme-text-primary">{t('settings.language')}</p>
                     <p className="text-[12px] theme-muted">{selectedLanguageLabel}</p>
                   </div>
                 </div>
@@ -431,7 +432,7 @@ export default function AccountSettingsView({ variant }: AccountSettingsViewProp
           <div className="theme-card w-full max-w-sm rounded-2xl p-8"
             style={{ boxShadow: '0 20px 60px rgba(0,0,0,0.2)' }}
             onClick={e => e.stopPropagation()}>
-            <h3 className="text-[20px] font-bold mb-6 theme-text-primary" style={{ fontFamily: 'Manrope, sans-serif' }}>Select Language</h3>
+            <h3 className="text-[20px] font-bold mb-6 theme-text-primary" style={{ fontFamily: 'Manrope, sans-serif' }}>{t('settings.selectLanguage')}</h3>
             <div className="space-y-2">
               {LANGUAGE_OPTIONS.map(option => (
                 <button key={option.value} onClick={() => handleLanguageSelect(option.value)}
@@ -441,7 +442,7 @@ export default function AccountSettingsView({ variant }: AccountSettingsViewProp
                     border: prefs.language === option.value ? '1px solid #b6ccba' : '1px solid var(--border)',
                     color: prefs.language === option.value ? '#172a1e' : 'var(--text-body)',
                   }}>
-                  <span className="text-[15px] font-medium">{option.label}</span>
+                  <span className="text-[15px] font-medium">{option.value === 'fr' ? t('language.fr') : t('language.en')}</span>
                   {prefs.language === option.value && (
                     <span className="material-symbols-outlined text-[20px]" style={{ color: '#172a1e' }}>check_circle</span>
                   )}

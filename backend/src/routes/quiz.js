@@ -3,6 +3,7 @@ const router = express.Router();
 const { getQuizStore, getUserStore } = require('../storage');
 const { authenticate, requireRole } = require('../middleware/authMiddleware');
 const { buildEmployerAnalytics } = require('../utils/employerAnalytics');
+const { computeStreak, buildLeaderboard } = require('../utils/employeeDashboard');
 
 const quizStore = getQuizStore();
 const requireEmployer = requireRole('employer');
@@ -55,6 +56,54 @@ router.get('/attempts/:userId', async (req, res) => {
   const { userId } = req.params;
   const attempts = await quizStore.findAttemptsByUser(userId);
   res.json({ attempts });
+});
+
+router.get('/employee-dashboard/:userId', async (req, res) => {
+  const { userId } = req.params;
+  const period = req.query.period === 'daily' ? 'daily' : 'weekly';
+
+  try {
+    const userStore = getUserStore();
+    const [quizzes, attempts, employees] = await Promise.all([
+      quizStore.findAll(),
+      quizStore.findAttemptsByUser(userId),
+      userStore.findAllEmployees(),
+    ]);
+
+    const quizMap = new Map(quizzes.map(quiz => [quiz.id, quiz]));
+    const { streakDays, daysUntilBadge } = computeStreak(attempts);
+
+    const trainingHistory = attempts.slice(0, 5).map(attempt => {
+      const quiz = quizMap.get(attempt.quizId);
+      return {
+        id: attempt.id,
+        quizName: quiz?.title ?? 'Unknown Quiz',
+        date: new Date(attempt.completedAt).toLocaleDateString('en-US', {
+          month: 'short',
+          day: 'numeric',
+          year: 'numeric',
+        }),
+        category: quiz?.category ?? 'Training',
+        score: attempt.score,
+        passed: attempt.passed,
+      };
+    });
+
+    const allAttempts = await quizStore.findAllAttempts();
+    const leaderboard = buildLeaderboard(allAttempts, employees, period, userId);
+
+    res.json({
+      dashboard: {
+        streakDays,
+        daysUntilBadge,
+        trainingHistory,
+        leaderboard,
+      },
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Unable to load dashboard data.' });
+  }
 });
 
 router.get('/:id', async (req, res) => {

@@ -76,8 +76,11 @@ const Course = {
                 category: courseData.category,
                 difficulty: courseData.difficulty,
                 certifiable: courseData.certifiable,
-                icon: 'menu_book',
-                color: '#efeeea'
+                required: courseData.required ?? Boolean(courseData.certifiable),
+                duration: courseData.duration ?? 'Self-paced',
+                icon: courseData.icon || 'menu_book',
+                color: courseData.color || '#efeeea',
+                thumbnail_url: courseData.thumbnailUrl || null,
             }]).select().single();
         
         if (courseError) throw courseError;

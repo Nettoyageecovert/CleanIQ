@@ -1,4 +1,5 @@
 import api from './auth';
+import type { EmployeeDashboardData } from './dashboard';
 
 export interface QuizOption {
   id: string;
@@ -157,4 +158,15 @@ export interface EmployerAnalytics {
 export const fetchEmployerAnalytics = async (): Promise<EmployerAnalytics> => {
   const response = await api.get<{ analytics: EmployerAnalytics }>('/quizzes/analytics/overview');
   return response.data.analytics;
+};
+
+export const fetchEmployeeDashboard = async (
+  userId: string,
+  period: 'daily' | 'weekly' = 'weekly',
+): Promise<EmployeeDashboardData> => {
+  const response = await api.get<{ dashboard: EmployeeDashboardData }>(
+    `/quizzes/employee-dashboard/${userId}`,
+    { params: { period } },
+  );
+  return response.data.dashboard;
 };
