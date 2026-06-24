@@ -1,6 +1,8 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import EmployerSidebar from '../components/EmployerSidebar';
+import { courseApi, fetchCourseCategories } from '../api/courses';
+import { TRAINING_CATEGORIES, getCategoryIcon } from '../constants/trainingCategories';
 
 interface Lesson {
   id: string;
@@ -24,14 +26,7 @@ interface CourseForm {
   certifiable: boolean;
 }
 
-const CATEGORIES = [
-  'Chemical Safety',
-  'Residential Cleaning Standards',
-  'Eco-Friendly Protocols',
-  'Advanced Stewardship',
-  'Floor Care & Surface Protection',
-  'Occupational Health & Safety',
-];
+const CATEGORIES = TRAINING_CATEGORIES;
 
 const createLesson = (type: 'video' | 'document'): Lesson => ({
   id: crypto.randomUUID(),
@@ -58,19 +53,18 @@ export default function CourseManagementPage() {
     certifiable: true,
   });
 
-  const [modules, setModules] = useState<Module[]>([
-    {
-      id: crypto.randomUUID(),
-      title: 'Module 1',
-      expanded: true,
-      lessons: [
-        { id: crypto.randomUUID(), title: 'Introduction to Chemical Safety', type: 'video', meta: '12:45 mins' },
-        { id: crypto.randomUUID(), title: 'Safety Data Sheet Guide (PDF)', type: 'document', meta: '4.2 MB' },
-      ],
-    },
-  ]);
+  const [modules, setModules] = useState<Module[]>([createModule()]);
+  const [categories, setCategories] = useState<string[]>([...CATEGORIES]);
+  const [isSaving, setIsSaving] = useState(false);
+  const [saveError, setSaveError] = useState('');
 
   const [thumbnail, setThumbnail] = useState<string | null>(null);
+
+  useEffect(() => {
+    fetchCourseCategories()
+      .then(setCategories)
+      .catch(() => setCategories([...CATEGORIES]));
+  }, []);
 
   const updateForm = (key: keyof CourseForm, value: string | boolean) => {
     setForm(prev => ({ ...prev, [key]: value }));
@@ -108,10 +102,54 @@ export default function CourseManagementPage() {
     if (file) setThumbnail(URL.createObjectURL(file));
   };
 
-  const handlePublish = () => {
-    alert('Course published successfully!');
-    navigate('/employer/dashboard');
+  const buildDurationLabel = () => {
+    const moduleCount = modules.filter(module => module.title.trim()).length || modules.length;
+    const lessonCount = modules.reduce((sum, module) => sum + module.lessons.length, 0);
+    if (lessonCount === 0) return 'Self-paced';
+    return `${moduleCount} module${moduleCount !== 1 ? 's' : ''} · ${lessonCount} lesson${lessonCount !== 1 ? 's' : ''}`;
   };
+
+  const saveCourse = async (status: 'draft' | 'published') => {
+    if (!form.title.trim()) {
+      setSaveError('Course title is required.');
+      return;
+    }
+
+    const iconStyle = getCategoryIcon(form.category);
+
+    setIsSaving(true);
+    setSaveError('');
+    try {
+      await courseApi.createCourse({
+        title: form.title.trim(),
+        description: form.description.trim() || form.title.trim(),
+        category: form.category,
+        difficulty: form.difficulty,
+        certifiable: form.certifiable,
+        required: form.certifiable,
+        duration: status === 'draft' ? 'draft' : buildDurationLabel(),
+        color: iconStyle.color,
+        icon: iconStyle.icon,
+        thumbnailUrl: thumbnail,
+        modules: modules.map(({ title, lessons }) => ({
+          title,
+          lessons: lessons.map(({ title: lessonTitle, type, meta }) => ({
+            title: lessonTitle,
+            type,
+            meta,
+          })),
+        })),
+      });
+      navigate('/employer/dashboard');
+    } catch {
+      setSaveError('Unable to save course. Please try again.');
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const handlePublish = () => saveCourse('published');
+  const handleSaveDraft = () => saveCourse('draft');
 
   const inputClass = 'theme-input w-full px-4 py-3 rounded-xl text-[15px] border outline-none transition-all';
 
@@ -361,7 +399,7 @@ export default function CourseManagementPage() {
                     <label className="block text-[13px] font-bold uppercase tracking-wider mb-2 theme-text-secondary">Category</label>
                     <select value={form.category} onChange={e => updateForm('category', e.target.value)}
                       className={inputClass} {...focusHandlers}>
-                      {CATEGORIES.map(cat => <option key={cat} value={cat}>{cat}</option>)}
+                      {categories.map(cat => <option key={cat} value={cat}>{cat}</option>)}
                     </select>
                   </div>
                   <div>
@@ -400,22 +438,24 @@ export default function CourseManagementPage() {
             style={{ boxShadow: '0 8px 30px rgba(0,0,0,0.06)' }}>
             <div className="flex items-center gap-3">
               <span className="material-symbols-outlined text-[20px] theme-muted">info</span>
-              <p className="text-[13px] theme-text-secondary">All changes are automatically saved to draft every 2 minutes.</p>
+              <p className="text-[13px] theme-text-secondary">
+                {saveError || 'Courses are saved to your training library when you publish or save a draft.'}
+              </p>
             </div>
             <div className="flex items-center gap-4">
-              <button onClick={() => navigate('/employer/dashboard')}
-                className="px-6 py-3 rounded-full text-[14px] font-bold border transition-all"
+              <button onClick={handleSaveDraft} disabled={isSaving}
+                className="px-6 py-3 rounded-full text-[14px] font-bold border transition-all disabled:opacity-50"
                 style={{ borderColor: '#705a49', color: '#705a49' }}
                 onMouseEnter={e => e.currentTarget.style.background = 'rgba(112,90,73,0.06)'}
                 onMouseLeave={e => e.currentTarget.style.background = 'transparent'}>
                 Save Draft
               </button>
-              <button onClick={handlePublish}
-                className="px-8 py-3 rounded-full text-[15px] font-bold transition-all"
+              <button onClick={handlePublish} disabled={isSaving}
+                className="px-8 py-3 rounded-full text-[15px] font-bold transition-all disabled:opacity-50"
                 style={{ background: '#172a1e', color: '#ffffff' }}
                 onMouseEnter={e => e.currentTarget.style.background = '#2d4033'}
                 onMouseLeave={e => e.currentTarget.style.background = '#172a1e'}>
-                Publish Course
+                {isSaving ? 'Saving...' : 'Publish Course'}
               </button>
             </div>
           </div>

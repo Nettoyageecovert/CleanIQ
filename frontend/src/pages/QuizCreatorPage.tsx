@@ -2,6 +2,7 @@ import { useEffect, useState, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import EmployerSidebar from '../components/EmployerSidebar';
 import { createQuiz, fetchQuizById, updateQuiz } from '../api/quiz';
+import { fetchCourses, fetchCourseCategories } from '../api/courses';
 
 interface QuizOption {
   id: string;
@@ -23,22 +24,6 @@ interface QuizSettings {
   timeLimit: number;
   passingPercent: number;
 }
-
-const CATEGORIES = [
-  'Safety Module',
-  'Technical Skillset',
-  'Internal Certification',
-  'Annual Compliance',
-  'Leadership Series',
-];
-
-const COURSES = [
-  'Chemical Safety 101',
-  'Residential Cleaning Standards',
-  'Eco-Friendly Protocols',
-  'Advanced Stewardship',
-  'Floor Care & Surface Protection',
-];
 
 const OPTION_LABELS = ['A', 'B', 'C', 'D'];
 
@@ -86,6 +71,23 @@ export default function QuizCreatorPage() {
   const [isLoadingQuiz, setIsLoadingQuiz] = useState(isEditMode);
   const [loadError, setLoadError] = useState('');
   const [publishError, setPublishError] = useState('');
+  const [categories, setCategories] = useState<string[]>([]);
+  const [courses, setCourses] = useState<{ id: string; title: string }[]>([]);
+
+  useEffect(() => {
+    Promise.all([
+      fetchCourseCategories(),
+      fetchCourses(),
+    ])
+      .then(([categoryList, courseList]) => {
+        setCategories(categoryList);
+        setCourses(courseList.map(course => ({ id: course.id, title: course.title })));
+      })
+      .catch(() => {
+        setCategories([]);
+        setCourses([]);
+      });
+  }, []);
 
   useEffect(() => {
     if (!quizId) return;
@@ -303,7 +305,7 @@ export default function QuizCreatorPage() {
                   onFocus={e => { e.target.style.borderColor = '#4f6355'; e.target.style.boxShadow = '0 0 0 3px rgba(79,99,85,0.1)'; }}
                   onBlur={e => { e.target.style.borderColor = '#e1e4e0'; e.target.style.boxShadow = 'none'; }}>
                   <option value="">Select Category...</option>
-                  {CATEGORIES.map(cat => <option key={cat} value={cat}>{cat}</option>)}
+                  {categories.map(cat => <option key={cat} value={cat}>{cat}</option>)}
                 </select>
               </div>
 
@@ -315,7 +317,11 @@ export default function QuizCreatorPage() {
                   onFocus={e => { e.target.style.borderColor = '#4f6355'; e.target.style.boxShadow = '0 0 0 3px rgba(79,99,85,0.1)'; }}
                   onBlur={e => { e.target.style.borderColor = '#e1e4e0'; e.target.style.boxShadow = 'none'; }}>
                   <option value="">Select Course...</option>
-                  {COURSES.map(course => <option key={course} value={course}>{course}</option>)}
+                  {courses.length === 0 ? (
+                    <option value="" disabled>No published courses yet</option>
+                  ) : (
+                    courses.map(course => <option key={course.id} value={course.title}>{course.title}</option>)
+                  )}
                 </select>
               </div>
 

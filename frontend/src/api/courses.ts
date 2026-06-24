@@ -1,6 +1,5 @@
 import api from './auth';
 
-// Define what a course looks like on the frontend
 export interface Lesson {
   id?: string;
   title: string;
@@ -19,43 +18,73 @@ export interface Course {
   title: string;
   description: string;
   category: string;
-  difficulty: 'Beginner' | 'Intermediate' | 'Advanced';
+  difficulty: 'Beginner' | 'Intermediate' | 'Advanced' | string;
   certifiable: boolean;
+  required?: boolean;
+  duration?: string;
+  color?: string;
+  icon?: string;
   thumbnailUrl?: string | null;
   modules?: Module[];
   createdAt?: string;
 }
 
+export interface EmployeeCourse extends Course {
+  progress: number;
+  progressStatus: 'completed' | 'in-progress' | 'not-started';
+}
+
 const ENDPOINT = '/courses';
 
 export const courseApi = {
-    // Fetch all courses (used by both employee my courses page and employer side)
-    getAllCourses: async (): Promise<Course[]> => {
-        const response = await api.get<Course[]>(ENDPOINT);
-        return response.data;
-    },
+  getAllCourses: async (): Promise<Course[]> => {
+    const response = await api.get<Course[]>(ENDPOINT);
+    return response.data;
+  },
 
-    // Fetch a single course by ID
-    getCourseById: async (id: string): Promise<Course> => {
-        const response = await api.get<Course>(`${ENDPOINT}/${id}`);
-        return response.data;
-    },
+  getCourseById: async (id: string): Promise<Course> => {
+    const response = await api.get<Course>(`${ENDPOINT}/${id}`);
+    return response.data;
+  },
 
-    // Create a new course (employer side)
-    createCourse: async (courseData: Omit<Course, 'id' | 'createdAt'>): Promise<Course> => {
-        const response = await api.post<Course>(ENDPOINT, courseData);
-        return response.data;
-    },
+  createCourse: async (courseData: {
+    title: string;
+    description: string;
+    category: string;
+    difficulty: string;
+    certifiable: boolean;
+    required?: boolean;
+    duration?: string;
+    color?: string;
+    icon?: string;
+    thumbnailUrl?: string | null;
+    modules?: Module[];
+  }): Promise<Course> => {
+    const response = await api.post<{ course: Course }>(ENDPOINT, courseData);
+    return response.data.course;
+  },
 
-    // Partially update a course (Employer side)
-    updateCourse: async (id: string, updatedFields: Partial<Omit<Course, 'id'>>): Promise<Course> => {
-        const response = await api.patch<Course>(`${ENDPOINT}/${id}`, updatedFields);
-        return response.data;
-    },
+  updateCourse: async (id: string, updatedFields: Partial<Omit<Course, 'id'>>): Promise<Course> => {
+    const response = await api.patch<Course>(`${ENDPOINT}/${id}`, updatedFields);
+    return response.data;
+  },
 
-    // Delete a course (Employer side)
-    deleteCourse: async (id: string): Promise<{ message: string }> => {
-        const response = await api.delete<{ message: string }>(`${ENDPOINT}/${id}`);
-        return response.data;
-    }
+  deleteCourse: async (id: string): Promise<{ message: string }> => {
+    const response = await api.delete<{ message: string }>(`${ENDPOINT}/${id}`);
+    return response.data;
+  },
 };
+
+export const fetchCourseCategories = async (): Promise<string[]> => {
+  const response = await api.get<{ categories: string[] }>(`${ENDPOINT}/meta/categories`);
+  return response.data.categories;
+};
+
+export const fetchEmployeeCourses = async (userId: string): Promise<EmployeeCourse[]> => {
+  const response = await api.get<{ courses: EmployeeCourse[] }>(`${ENDPOINT}/employee/${userId}`);
+  return response.data.courses;
+};
+
+export const fetchCourses = async (): Promise<Course[]> => courseApi.getAllCourses();
+
+export const createCourse = courseApi.createCourse;

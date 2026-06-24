@@ -1,4 +1,5 @@
-require('dotenv').config();
+const path = require('path');
+require('dotenv').config({ path: path.resolve(__dirname, '../.env') });
 const express = require('express');
 const cors = require('cors');
 const authRoutes = require('./routes/auth');
@@ -16,7 +17,14 @@ app.use('/api/auth', authRoutes);
 app.use('/api/courses', courseRoutes);
 app.use('/api/quizzes', quizRoutes);
 
-// Health Check
+app.get('/', (req, res) => {
+  res.json({
+    status: 'ok',
+    message: 'CleanIQ backend is running',
+    frontend: 'http://localhost:5173',
+  });
+});
+
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', message: 'CleanIQ API is running' });
 });

@@ -1,43 +1,44 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import Sidebar from '../components/Sidebar';
-
-interface TrainingRecord {
-  id: string;
-  quizName: string;
-  date: string;
-  category: string;
-  score: number;
-  passed: boolean;
-}
-
-interface LeaderboardEntry {
-  rank: number;
-  name: string;
-  points: number;
-  tier: string;
-  isCurrentUser?: boolean;
-}
-
-const mockTrainingHistory: TrainingRecord[] = [
-  { id: '1', quizName: 'Advanced Safety Protocol', date: 'Oct 24, 2024', category: 'Compliance Module', score: 95, passed: true },
-  { id: '2', quizName: 'Chemical Handling Basics', date: 'Oct 15, 2024', category: 'Foundation Course', score: 88, passed: true },
-  { id: '3', quizName: 'Eco-Friendly Disposal Standards', date: 'Oct 02, 2024', category: 'Environmental Policy', score: 62, passed: false },
-];
-
-const mockLeaderboard: LeaderboardEntry[] = [
-  { rank: 1, name: 'Maya Chen', points: 12450, tier: 'DIAMOND' },
-  { rank: 2, name: 'You', points: 11820, tier: 'DIAMOND', isCurrentUser: true },
-  { rank: 3, name: 'Liam Sterling', points: 11200, tier: 'PLATINUM' },
-  { rank: 4, name: 'Sarah Mbeki', points: 10800, tier: 'PLATINUM' },
-  { rank: 5, name: 'James Okafor', points: 9500, tier: 'GOLD' },
-];
+import { fetchEmployeeDashboard } from '../api/quiz';
+import type { DashboardLeaderboardEntry, DashboardTrainingRecord } from '../api/dashboard';
+import { useTranslation } from '../i18n/useTranslation';
 
 export default function EmployeeDashboard() {
   const { user } = useAuth();
+  const navigate = useNavigate();
+  const { t } = useTranslation();
   const [leaderboardPeriod, setLeaderboardPeriod] = useState<'daily' | 'weekly'>('weekly');
+  const [isLoading, setIsLoading] = useState(true);
+  const [streakDays, setStreakDays] = useState(0);
+  const [daysUntilBadge, setDaysUntilBadge] = useState(15);
+  const [trainingHistory, setTrainingHistory] = useState<DashboardTrainingRecord[]>([]);
+  const [leaderboard, setLeaderboard] = useState<DashboardLeaderboardEntry[]>([]);
 
-  const streakDays = 12;
+  useEffect(() => {
+    if (!user?.id) return;
+
+    const load = async () => {
+      setIsLoading(true);
+      try {
+        const data = await fetchEmployeeDashboard(user.id, leaderboardPeriod);
+        setStreakDays(data.streakDays);
+        setDaysUntilBadge(data.daysUntilBadge);
+        setTrainingHistory(data.trainingHistory);
+        setLeaderboard(data.leaderboard);
+      } catch {
+        setTrainingHistory([]);
+        setLeaderboard([]);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    load();
+  }, [user?.id, leaderboardPeriod]);
+
   const circumference = 2 * Math.PI * 78;
   const strokeDashoffset = circumference - ((streakDays / 15) * circumference);
   const firstName = user?.fullName?.split(' ')[0] || 'there';
@@ -93,19 +94,21 @@ export default function EmployeeDashboard() {
                 </p>
               </div>
               <div className="relative z-10 flex flex-wrap gap-4 mt-8">
-                <button className="font-bold py-3 px-7 rounded-xl transition-all duration-300 flex items-center gap-2"
+                <button onClick={() => navigate('/employee/courses')}
+                  className="font-bold py-3 px-7 rounded-xl transition-all duration-300 flex items-center gap-2"
                   style={{ background: '#d2e8d6', color: '#172a1e' }}
                   onMouseEnter={e => e.currentTarget.style.background = '#ffffff'}
                   onMouseLeave={e => e.currentTarget.style.background = '#d2e8d6'}>
                   <span className="material-symbols-outlined">play_circle</span>
-                  Resume Learning
+                  {t('dashboard.resumeLearning')}
                 </button>
-                <button className="font-bold py-3 px-7 rounded-xl border transition-all duration-300 flex items-center gap-2"
+                <button onClick={() => navigate('/employee/quiz')}
+                  className="font-bold py-3 px-7 rounded-xl border transition-all duration-300 flex items-center gap-2"
                   style={{ background: 'rgba(255,255,255,0.1)', color: '#ffffff', border: '1px solid rgba(255,255,255,0.2)' }}
                   onMouseEnter={e => e.currentTarget.style.background = 'rgba(255,255,255,0.2)'}
                   onMouseLeave={e => e.currentTarget.style.background = 'rgba(255,255,255,0.1)'}>
                   <span className="material-symbols-outlined">sports_esports</span>
-                  Join Live Game
+                  {t('dashboard.joinLiveQuiz')}
                 </button>
               </div>
               <div className="absolute right-[-5%] bottom-[-10%] opacity-[0.07] pointer-events-none">
@@ -134,7 +137,11 @@ export default function EmployeeDashboard() {
               <h3 className="text-[20px] font-bold mb-1 theme-text-primary" style={{ fontFamily: 'Manrope, sans-serif' }}>
                 Service Milestone
               </h3>
-              <p className="text-[14px] theme-text-secondary">3 days until your next Achievement Badge</p>
+              <p className="text-[14px] theme-text-secondary">
+                {daysUntilBadge === 0
+                  ? 'Achievement badge unlocked!'
+                  : `${daysUntilBadge} day${daysUntilBadge !== 1 ? 's' : ''} until your next Achievement Badge`}
+              </p>
             </div>
           </section>
 
@@ -143,15 +150,22 @@ export default function EmployeeDashboard() {
               <h3 className="text-[24px] font-bold theme-text-primary" style={{ fontFamily: 'Manrope, sans-serif' }}>
                 Training History
               </h3>
-              <button className="text-[14px] font-bold hover:underline theme-text-primary">View All</button>
+              <button onClick={() => navigate('/employee/quiz')}
+                className="text-[14px] font-bold hover:underline theme-text-primary">
+                {t('dashboard.viewAll')}
+              </button>
             </div>
             <div className="theme-card bg-white rounded-xl border p-6 md:p-8"
               style={{ boxShadow: '0 2px 8px rgba(0,0,0,0.04)', borderColor: 'var(--border-subtle)' }}>
-              {mockTrainingHistory.map((record, index) => (
+              {isLoading ? (
+                <p className="text-center py-8 theme-muted">Loading training history...</p>
+              ) : trainingHistory.length === 0 ? (
+                <p className="text-center py-8 theme-muted">{t('dashboard.noHistory')}</p>
+              ) : trainingHistory.map((record, index) => (
                 <div key={record.id} className="relative flex gap-6 pb-8"
                   style={{
                     paddingLeft: '52px',
-                    borderLeft: index < mockTrainingHistory.length - 1 ? '2px solid var(--border)' : '2px solid transparent',
+                    borderLeft: index < trainingHistory.length - 1 ? '2px solid var(--border)' : '2px solid transparent',
                     marginLeft: '20px',
                   }}>
                   <div className={`absolute -left-[21px] top-0 w-10 h-10 rounded-full theme-icon-circle ${record.passed ? 'theme-icon-circle--success' : 'theme-icon-circle--error'}`}>
@@ -203,63 +217,69 @@ export default function EmployeeDashboard() {
             </div>
             <div className="theme-card bg-white rounded-xl border overflow-hidden"
               style={{ boxShadow: '0 2px 8px rgba(0,0,0,0.04)', borderColor: 'var(--border-subtle)' }}>
-              <div className="overflow-x-auto">
-                <table className="w-full text-left">
-                  <thead>
-                    <tr className="theme-panel">
-                      {['Rank', 'Employee', 'Score', 'Tier'].map(h => (
-                        <th key={h} className="px-8 py-5 text-[11px] font-bold uppercase tracking-wider theme-muted">{h}</th>
-                      ))}
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {mockLeaderboard.map(entry => (
-                      <tr key={entry.rank}
-                        style={{
-                          background: entry.isCurrentUser ? 'rgba(23,42,30,0.04)' : 'transparent',
-                          borderLeft: entry.isCurrentUser ? '4px solid #172a1e' : '4px solid transparent',
-                          borderBottom: '1px solid var(--border-subtle)',
-                        }}>
-                        <td className="px-8 py-5">
-                          <div className={`w-8 h-8 rounded-lg flex items-center justify-center font-bold text-sm ${!entry.isCurrentUser && entry.rank === 1 ? 'theme-rank-first' : ''}`}
-                            style={{
-                              background: entry.isCurrentUser ? '#172a1e' : entry.rank === 1 ? undefined : 'var(--bg-panel)',
-                              color: entry.isCurrentUser ? '#ffffff' : entry.rank === 1 ? undefined : 'var(--text-secondary)',
-                            }}>
-                            {entry.rank}
-                          </div>
-                        </td>
-                        <td className="px-8 py-5">
-                          <div className="flex items-center gap-3">
-                            <div className="w-9 h-9 rounded-full flex items-center justify-center font-bold text-[14px]"
-                              style={{
-                                background: entry.isCurrentUser ? '#172a1e' : 'var(--bg-panel)',
-                                color: entry.isCurrentUser ? '#ffffff' : 'var(--text-secondary)',
-                              }}>
-                              {entry.isCurrentUser ? user?.fullName?.charAt(0).toUpperCase() : entry.name.charAt(0)}
-                            </div>
-                            <span className="font-bold text-[14px] theme-text-primary">
-                              {entry.isCurrentUser ? `${user?.fullName} (You)` : entry.name}
-                            </span>
-                          </div>
-                        </td>
-                        <td className="px-8 py-5 font-bold theme-text-primary">
-                          {entry.points.toLocaleString()} pts
-                        </td>
-                        <td className="px-8 py-5">
-                          <span className={`px-4 py-1.5 rounded-full text-[11px] font-bold theme-badge ${
-                            entry.tier === 'DIAMOND' ? 'theme-badge--tier-diamond'
-                              : entry.tier === 'PLATINUM' ? 'theme-badge--tier-platinum'
-                              : 'theme-badge--tier-gold'
-                          }`}>
-                            {entry.tier}
-                          </span>
-                        </td>
+              {isLoading ? (
+                <p className="text-center py-12 theme-muted">Loading leaderboard...</p>
+              ) : leaderboard.length === 0 ? (
+                <p className="text-center py-12 theme-muted">{t('dashboard.noLeaderboard')}</p>
+              ) : (
+                <div className="overflow-x-auto">
+                  <table className="w-full text-left">
+                    <thead>
+                      <tr className="theme-panel">
+                        {['Rank', 'Employee', 'Score', 'Tier'].map(h => (
+                          <th key={h} className="px-8 py-5 text-[11px] font-bold uppercase tracking-wider theme-muted">{h}</th>
+                        ))}
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+                    </thead>
+                    <tbody>
+                      {leaderboard.map(entry => (
+                        <tr key={`${entry.rank}-${entry.name}`}
+                          style={{
+                            background: entry.isCurrentUser ? 'rgba(23,42,30,0.04)' : 'transparent',
+                            borderLeft: entry.isCurrentUser ? '4px solid #172a1e' : '4px solid transparent',
+                            borderBottom: '1px solid var(--border-subtle)',
+                          }}>
+                          <td className="px-8 py-5">
+                            <div className={`w-8 h-8 rounded-lg flex items-center justify-center font-bold text-sm ${!entry.isCurrentUser && entry.rank === 1 ? 'theme-rank-first' : ''}`}
+                              style={{
+                                background: entry.isCurrentUser ? '#172a1e' : entry.rank === 1 ? undefined : 'var(--bg-panel)',
+                                color: entry.isCurrentUser ? '#ffffff' : entry.rank === 1 ? undefined : 'var(--text-secondary)',
+                              }}>
+                              {entry.rank}
+                            </div>
+                          </td>
+                          <td className="px-8 py-5">
+                            <div className="flex items-center gap-3">
+                              <div className="w-9 h-9 rounded-full flex items-center justify-center font-bold text-[14px]"
+                                style={{
+                                  background: entry.isCurrentUser ? '#172a1e' : 'var(--bg-panel)',
+                                  color: entry.isCurrentUser ? '#ffffff' : 'var(--text-secondary)',
+                                }}>
+                                {entry.isCurrentUser ? user?.fullName?.charAt(0).toUpperCase() : entry.name.charAt(0)}
+                              </div>
+                              <span className="font-bold text-[14px] theme-text-primary">
+                                {entry.isCurrentUser ? `${user?.fullName} (You)` : entry.name}
+                              </span>
+                            </div>
+                          </td>
+                          <td className="px-8 py-5 font-bold theme-text-primary">
+                            {entry.points.toLocaleString()} pts
+                          </td>
+                          <td className="px-8 py-5">
+                            <span className={`px-4 py-1.5 rounded-full text-[11px] font-bold theme-badge ${
+                              entry.tier === 'DIAMOND' ? 'theme-badge--tier-diamond'
+                                : entry.tier === 'PLATINUM' ? 'theme-badge--tier-platinum'
+                                : 'theme-badge--tier-gold'
+                            }`}>
+                              {entry.tier}
+                            </span>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
             </div>
           </section>
         </div>
