@@ -83,4 +83,4 @@ module.exports = {
     uploadLessonFile,
     createFileUrl,
     removeFiles,
-};frontend/src/components/EmployerSidebar.tsx 
+};
