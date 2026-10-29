@@ -8,6 +8,7 @@ import ForgotPasswordPage from './pages/ForgotPasswordPage';
 import EmployeeDashboard from './pages/EmployeeDashboard';
 import EmployerDashboardPage from './pages/EmployerDashboardPage';
 import MyCoursesPage from './pages/MyCoursesPage';
+import EmployeeCoursePage from './pages/EmployeeCoursePage';
 import QuizCenterPage from './pages/QuizCenterPage';
 import QuizPlayPage from './pages/QuizPlayPage';
 import QuizReviewPage from './pages/QuizReviewPage';
@@ -15,6 +16,7 @@ import SettingsPage from './pages/SettingsPage';
 import EmployerSettingsPage from './pages/EmployerSettingsPage';
 import EmployeeAnalyticsPage from './pages/EmployeeAnalyticsPage';
 import CourseManagementPage from './pages/CourseManagementPage';
+import CourseListPage from './pages/CourseListPage';
 import QuizCreatorPage from './pages/QuizCreatorPage';
 import EmployerAnalyticsPage from './pages/EmployerAnalyticsPage';
 
@@ -47,6 +49,7 @@ function AppRoutes() {
 
       <Route path="/employee/dashboard" element={user?.role === 'employee' ? <EmployeeDashboard /> : <Navigate to={employeeFallback} replace />} />
       <Route path="/employee/courses" element={user?.role === 'employee' ? <MyCoursesPage /> : <Navigate to={employeeFallback} replace />} />
+      <Route path="/employee/courses/:courseId" element={user?.role === 'employee' ? <EmployeeCoursePage /> : <Navigate to={employeeFallback} replace />} />
       <Route path="/employee/quiz" element={user?.role === 'employee' ? <QuizCenterPage /> : <Navigate to={employeeFallback} replace />} />
       <Route path="/employee/quiz/play/:quizId" element={user?.role === 'employee' ? <QuizPlayPage /> : <Navigate to={employeeFallback} replace />} />
       <Route path="/employee/quiz/review/:attemptId" element={user?.role === 'employee' ? <QuizReviewPage /> : <Navigate to={employeeFallback} replace />} />
@@ -54,7 +57,9 @@ function AppRoutes() {
       <Route path="/employee/settings" element={user?.role === 'employee' ? <SettingsPage /> : <Navigate to={employeeFallback} replace />} />
 
       <Route path="/employer/dashboard" element={user?.role === 'employer' ? <EmployerDashboardPage /> : <Navigate to={employerFallback} replace />} />
-      <Route path="/employer/courses" element={user?.role === 'employer' ? <CourseManagementPage /> : <Navigate to={employerFallback} replace />} />
+      <Route path="/employer/courses" element={user?.role === 'employer' ? <CourseListPage /> : <Navigate to={employerFallback} replace />} />
+      <Route path="/employer/courses/new" element={user?.role === 'employer' ? <CourseManagementPage key="new-course" /> : <Navigate to={employerFallback} replace />} />
+      <Route path="/employer/courses/:courseId/edit" element={user?.role === 'employer' ? <CourseManagementPage key="edit-course" /> : <Navigate to={employerFallback} replace />} />
       <Route path="/employer/quiz-creator" element={user?.role === 'employer' ? <QuizCreatorPage /> : <Navigate to={employerFallback} replace />} />
       <Route path="/employer/quiz-creator/:quizId" element={user?.role === 'employer' ? <QuizCreatorPage /> : <Navigate to={employerFallback} replace />} />
       <Route path="/employer/analytics" element={user?.role === 'employer' ? <EmployerAnalyticsPage /> : <Navigate to={employerFallback} replace />} />

@@ -42,7 +42,7 @@ export default function EmployerSidebar() {
 
       <nav className="flex-1 px-3 space-y-1">
         {navItems.map(item => {
-          const isActive = location.pathname === item.path;
+          const isActive = location.pathname === item.path || location.pathname.startsWith(`${item.path}/`);
           return (
             <button key={item.path}
               onClick={() => navigate(item.path)}

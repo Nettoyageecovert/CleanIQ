@@ -133,7 +133,7 @@ export default function MyCoursesPage() {
                   {featuredCourse.description}
                 </p>
                 <div className="flex items-center gap-4">
-                  <button onClick={() => navigate('/employee/quiz')}
+                  <button onClick={() => navigate(`/employee/courses/${featuredCourse.id}`)}
                     className="px-6 py-3 rounded-full font-bold text-[14px] flex items-center gap-2 transition-all"
                     style={{ background: '#d2e8d6', color: '#172a1e' }}
                     onMouseEnter={e => e.currentTarget.style.background = '#ffffff'}
@@ -196,7 +196,7 @@ export default function MyCoursesPage() {
             ) : filteredCourses.map(course => (
               <div key={course.id}
                 className="theme-card rounded-[20px] overflow-hidden border flex flex-col cursor-pointer transition-all duration-300"
-                onClick={() => navigate('/employee/quiz')}
+                onClick={() => navigate(`/employee/courses/${course.id}`)}
                 onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-4px)'; e.currentTarget.style.boxShadow = '0 12px 24px rgba(45,64,51,0.1)'; }}
                 onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 2px 8px rgba(0,0,0,0.04)'; }}>
                 <div className="h-44 relative flex items-center justify-center theme-course-hero"
